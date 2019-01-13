@@ -1,4 +1,5 @@
 {
+
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "build/dist",
@@ -20,10 +21,6 @@
     "noUnusedLocals": true,
     "esModuleInterop":true,
     "skipLibCheck": true,
-  },
-  "rules": {
-    "ordered-imports": [false],
-    "object-literal-sort-keys": [false]
   },
   "exclude": [
     "node_modules",

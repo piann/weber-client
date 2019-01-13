@@ -2,7 +2,7 @@ import ApolloClient, { Operation } from "apollo-boost";
 
 const client = new ApolloClient({
     clientState:{
-        defaults:{
+        defaults:{  // set the default
             auth:{
                 __typename:"Auth",
                 isLoggedIn:Boolean(localStorage.getItem("jwt"))
