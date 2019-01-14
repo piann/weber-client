@@ -5,7 +5,7 @@ import client from "./apollo";
 import App from './Components/App';
 import GlobalStyle from "src/global-styles";
 
-ReactDOM.render(
+ReactDOM.render( 
   <ApolloProvider client={client}>
     <App />
     <GlobalStyle />
