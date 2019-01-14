@@ -7,23 +7,23 @@ import {
     Switch
 } from "react-router-dom";
 
-import AddPlace from "../../Routes/AddPlace";
-import EditAccount from "../../Routes/EditAccount";
-import FindAddress from "../../Routes/FindAddress";
-import Home from "../../Routes/Home";
 import OutHome from "../../Routes/OutHome";
-import PhoneLogin from "../../Routes/PhoneLogin";
-import Places from "../../Routes/Places";
-import Ride from "../../Routes/Ride";
-import Settings from "../../Routes/Settings";
-import SocialLogin from "../../Routes/SocialLogin";
-import VerifyPhone from "../../Routes/VerifyPhone";
+import Home from "../../Routes/Home";
+// import AddPlace from "../../Routes/AddPlace";
+// import EditAccount from "../../Routes/EditAccount";
+// import FindAddress from "../../Routes/FindAddress";
+// import PhoneLogin from "../../Routes/PhoneLogin";
+// import Places from "../../Routes/Places";
+// import Ride from "../../Routes/Ride";
+// import Settings from "../../Routes/Settings";
+// import SocialLogin from "../../Routes/SocialLogin";
+// import VerifyPhone from "../../Routes/VerifyPhone";
 
 interface IProps{
     isLoggedIn:boolean;
 }
 
-//const AppPresenter:React.SFC<IProps> = ({isLoggedIn}) =>
+// const AppPresenter:React.SFC<IProps> = ({isLoggedIn}) =>
 //    isLoggedIn ? <span>U R In!</span>:<span>U R Out!</span>;
 const AppPresenter:React.SFC<IProps> = ({isLoggedIn}) => 
 <BrowserRouter>{isLoggedIn ?<LoggedInRoutes/>:<LoggedOutRoutes/>}</BrowserRouter>
@@ -32,9 +32,9 @@ const AppPresenter:React.SFC<IProps> = ({isLoggedIn}) =>
 const LoggedOutRoutes: React.SFC = () => (
     <Switch>
         <Route path ={"/"} exact={true} component={OutHome} />
-        <Route path ={"/phone-login"} component={PhoneLogin} />
+        {/* <Route path ={"/phone-login"} component={PhoneLogin} />
         <Route path ={"/verify-phone/:number"} component={VerifyPhone} />
-        <Route path ={"/social-login"} component={SocialLogin} />    
+        <Route path ={"/social-login"} component={SocialLogin} />     */}
         <Redirect from={"*"} to={"/"} />
     </Switch>
 );
@@ -42,12 +42,12 @@ const LoggedOutRoutes: React.SFC = () => (
     const LoggedInRoutes: React.SFC = () => (
     <Switch>
         <Route path ={"/"} exact={true} component={Home} />
-        <Route path ={"/ride"} component={Ride} />
+        {/*<Route path ={"/ride"} component={Ride} />
         <Route path ={"/edit-account"} component={EditAccount} />
         <Route path ={"/settings"} component={Settings} />
         <Route path ={"/places"} component={Places} />
         <Route path ={"/add-place"} component={AddPlace} />
-        <Route path ={"/find-address"} component={FindAddress} />
+        <Route path ={"/find-address"} component={FindAddress} /> */}
         <Redirect from={"*"} to={"/"} />
 
     </Switch>
