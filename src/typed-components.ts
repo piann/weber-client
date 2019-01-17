@@ -3,6 +3,8 @@ import { ThemedStyledComponentsModule } from "styled-components";
 
 export interface IThemeInterface {
     greenColor:string;
+    greyColor:string;
+    indigoColor:string;
 }
 
 const {

@@ -7,16 +7,16 @@ import {
     Switch
 } from "react-router-dom";
 
-import OutHome from "../../Routes/OutHome";
+import Login from "../../Routes/Login";
 import Home from "../../Routes/Home";
+import SocialLogin from "../../Routes/SocialLogin";
+import PhoneLogin from "../../Routes/PhoneLogin";
 // import AddPlace from "../../Routes/AddPlace";
 // import EditAccount from "../../Routes/EditAccount";
 // import FindAddress from "../../Routes/FindAddress";
-// import PhoneLogin from "../../Routes/PhoneLogin";
 // import Places from "../../Routes/Places";
 // import Ride from "../../Routes/Ride";
 // import Settings from "../../Routes/Settings";
-// import SocialLogin from "../../Routes/SocialLogin";
 // import VerifyPhone from "../../Routes/VerifyPhone";
 
 interface IProps{
@@ -31,10 +31,11 @@ const AppPresenter:React.SFC<IProps> = ({isLoggedIn}) =>
 
 const LoggedOutRoutes: React.SFC = () => (
     <Switch>
-        <Route path ={"/"} exact={true} component={OutHome} />
-        {/* <Route path ={"/phone-login"} component={PhoneLogin} />
-        <Route path ={"/verify-phone/:number"} component={VerifyPhone} />
-        <Route path ={"/social-login"} component={SocialLogin} />     */}
+        <Route path ={"/"} exact={true} component={Login} />
+        <Route path ={"/social-login"} component={SocialLogin} />
+        <Route path ={"/phone-login"} component={PhoneLogin} />
+        {/* <Route path ={"/verify-phone/:number"} component={VerifyPhone} />
+        */}
         <Redirect from={"*"} to={"/"} />
     </Switch>
 );

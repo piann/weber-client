@@ -3,8 +3,12 @@ import {createGlobalStyle} from "./typed-components";
 
 
 // tslint:disable-next-line
+// font-family: 'Shadows Into Light', cursive;
+// font-family: 'Nunito Sans', sans-serif;
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css?family=Maven+Pro');
+@import url('https://fonts.googleapis.com/css?family=Shadows+Into+Light');
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans|Shadows+Into+Light');
 
     ${reset}
     * {
