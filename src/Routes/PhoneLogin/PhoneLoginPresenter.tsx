@@ -78,7 +78,14 @@ const InputTrans = styled(Input)`
     margin-top: 15px;
 `;
 
-const PhoneLoginPresenter = () => (
+interface IProps{
+    countryCode:string;
+    phoneNumber: string;
+    onInputChange: (ev: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>) => void;
+    onSubmit: (ev: React.FormEvent<HTMLFormElement>) =>void;
+}
+
+const PhoneLoginPresenter:React.SFC<IProps> = ({countryCode, phoneNumber, onInputChange, onSubmit}) => (
     <Container>
     <Helmet>
       <title>Phone Login</title>
@@ -86,16 +93,20 @@ const PhoneLoginPresenter = () => (
     <BackArrow backTo={"/"} />
     <Card>
     <Title>Enter your Mobile Number</Title>
-    <CountrySelect>
+    <CountrySelect value={countryCode} name={"countryCode"} onChange={onInputChange}>
       {countries.map((country, index) => (
           <CountryOption key={index} value={country.dial_code}>
           {country.flag} {country.name} ({country.dial_code})
         </CountryOption>
       ))}
     </CountrySelect>
-    <FormExtended >
+    <FormExtended submitFn={onSubmit}>
       <InputTrans
         placeholder={"01012345678 (No hyphen)"}
+        required={true}
+        value={phoneNumber}
+        name={"phoneNumber"}
+        onChange={onInputChange}
         />
       <ButtonExtended value="Send SMS Verification">
           <svg
@@ -112,5 +123,6 @@ const PhoneLoginPresenter = () => (
     </Card>
   </Container>
 );  
+
 
 export default PhoneLoginPresenter;
