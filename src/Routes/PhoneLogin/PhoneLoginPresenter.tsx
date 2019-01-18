@@ -7,26 +7,46 @@ import countries from "../../countries";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import Form from "../../Components/Form";
-import polar from "../../images/polar.png";
+import whiteCar from "../../images/whiteCar.png";
 
 const Container = styled.div`
+    min-height: 600px;
     height : 100vh;
-    background:url(${polar});
+    background:url(${whiteCar});
     background-size:cover;
     
 `;
 
 const Title = styled.div`
-  padding-top:10vh;
-  margin-left:20px;
+  padding-top:35px;
   font-size: 22px;
   font-weight:500;
   margin-bottom: 40px;
 `;
 
+const Card = styled.div`
+  position:absolute;
+  top:80px;
+  left:0;
+  right:0;
+  margin-left:auto;
+  margin-right:auto;
+  width: 320px;
+  height: 340px;
+  background-color: whitesmoke;
+  opacity:0.65;
+  border-radius: 10px;
+  display: flex;
+  flex-direction:column;
+  
+  align-items: center;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 -14px 28px rgba(0, 0, 0, 0.22);
+`;
+
+
 const CountrySelect = styled.select`
   margin-left:20px;
-  font-size: 20px;
+  font-size: 17px;
   color: "#2c3e50";
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -43,7 +63,7 @@ const CountryOption = styled.option``;
 
 
 const ButtonExtended = styled(Button)`
-    margin-top:30px;
+    margin-top:40px;
     
 `;
 
@@ -55,6 +75,7 @@ const FormExtended = styled(Form)`
 
 const InputTrans = styled(Input)`
     background:transparent;
+    margin-top: 15px;
 `;
 
 const PhoneLoginPresenter = () => (
@@ -63,17 +84,18 @@ const PhoneLoginPresenter = () => (
       <title>Phone Login</title>
     </Helmet>
     <BackArrow backTo={"/"} />
+    <Card>
     <Title>Enter your Mobile Number</Title>
     <CountrySelect>
       {countries.map((country, index) => (
-        <CountryOption key={index} value={country.dial_code}>
+          <CountryOption key={index} value={country.dial_code}>
           {country.flag} {country.name} ({country.dial_code})
         </CountryOption>
       ))}
     </CountrySelect>
     <FormExtended >
       <InputTrans
-        placeholder={"010 0000 0000 (exclude ' - ')"}
+        placeholder={"01012345678 (No hyphen)"}
         />
       <ButtonExtended value="Send SMS Verification">
           <svg
@@ -82,11 +104,12 @@ const PhoneLoginPresenter = () => (
             height="24"
             viewBox="0 0 24 24"
             fill={"white"}
-          >
+            >
             <path d="M7.33 24l-2.83-2.829 9.339-9.175-9.339-9.167 2.83-2.829 12.17 11.996z" />
           </svg>
       </ButtonExtended>
     </FormExtended>
+    </Card>
   </Container>
 );  
 

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "../../typed-components";
 
 const Container = styled.input`
-  width: 95%;
+  width: 99%;
   background-color: black;
   color: white;
   padding: 15px 0;

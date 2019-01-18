@@ -1,4 +1,10 @@
 const countries = [
+  {
+    name: "Korea, Republic of",
+    dial_code: "+82",
+    code: "KR",
+    flag: "🇰🇷"
+  },
   { name: "Afghanistan", dial_code: "+93", code: "AF", flag: "🇦🇫" },
   { name: "Åland Islands", dial_code: "+358", code: "AX", flag: "🇦🇽" },
   { name: "Albania", dial_code: "+355", code: "AL", flag: "🇦🇱" },
@@ -215,12 +221,7 @@ const countries = [
     code: "KP",
     flag: "🇰🇵"
   },
-  {
-    name: "Korea, Republic of South Korea",
-    dial_code: "+82",
-    code: "KR",
-    flag: "🇰🇷"
-  },
+
   { name: "Kosovo", dial_code: "+383", code: "XK", flag: "🇽🇰" },
   { name: "Kuwait", dial_code: "+965", code: "KW", flag: "🇰🇼" },
   { name: "Kyrgyzstan", dial_code: "+996", code: "KG", flag: "🇰🇬" },
