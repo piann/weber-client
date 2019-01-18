@@ -9,7 +9,7 @@ const AppContainer = ({data}) => (
 
 <ThemeProvider theme={theme}>
     <>
-    <AppPrensenter isLoggedIn={data.auth.isLoggedIn}/>;
+    <AppPrensenter isLoggedIn={data.auth.isLoggedIn}/>
     </>
 </ThemeProvider>
 
