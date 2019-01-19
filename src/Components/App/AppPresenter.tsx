@@ -17,7 +17,7 @@ import PhoneLogin from "../../Routes/PhoneLogin";
 // import Places from "../../Routes/Places";
 // import Ride from "../../Routes/Ride";
 // import Settings from "../../Routes/Settings";
-// import VerifyPhone from "../../Routes/VerifyPhone";
+import VerifyPhone from "../../Routes/VerifyPhone";
 
 interface IProps{
     isLoggedIn:boolean;
@@ -34,8 +34,8 @@ const LoggedOutRoutes: React.SFC = () => (
         <Route path ={"/"} exact={true} component={Login} />
         <Route path ={"/social-login"} component={SocialLogin} />
         <Route path ={"/phone-login"} component={PhoneLogin} />
-        {/* <Route path ={"/verify-phone/:number"} component={VerifyPhone} />
-        */}
+        <Route path ={"/verify-phone"} component={VerifyPhone} />
+        
         <Redirect from={"*"} to={"/"} />
     </Switch>
 );

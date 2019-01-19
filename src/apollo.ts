@@ -43,7 +43,7 @@ const client = new ApolloClient({
             }
         })
     },
-    uri:"http://localhost:4000/graphql"
+    uri:"http://192.168.0.8:4000/graphql"
 })
 
 export default client;

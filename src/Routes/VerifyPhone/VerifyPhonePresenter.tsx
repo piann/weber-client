@@ -3,11 +3,11 @@ import Helmet from "react-helmet";
 // import {RouteComponentProps} from 'react-router-dom';
 import styled from "../../typed-components";
 import BackArrow from "../../Components/BackArrow";
-import countries from "../../countries";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import Form from "../../Components/Form";
 import whiteCar from "../../images/whiteCar.png";
+import { MutationFn } from 'react-apollo';
 
 const Container = styled.div`
     min-height: 600px;
@@ -32,7 +32,7 @@ const Card = styled.div`
   margin-left:auto;
   margin-right:auto;
   width: 320px;
-  height: 330px;
+  height: 250px;
   background-color: rgba(245,245,245,0.35);
   border-radius: 10px;
   display: flex;
@@ -41,24 +41,6 @@ const Card = styled.div`
   align-items: center;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 -14px 28px rgba(0, 0, 0, 0.22);
 `;
-
-
-const CountrySelect = styled.select`
-  margin-left:20px;
-  font-size: 17px;
-  color: "#2c3e50";
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-color: white;
-  border: 0;
-  font-family: "Maven Pro";
-  margin-bottom: 20px;
-  width: 90%;
-  background:transparent;
-`;
-
-const CountryOption = styled.option``;
 
 
 const ButtonExtended = styled(Button)`
@@ -87,44 +69,39 @@ const Spin = styled.div`
 `;
 
 
+
 interface IProps{
-    countryCode:string;
-    phoneNumber: string;
-    onInputChange: (ev: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>) => void;
-    onSubmit: (ev: React.FormEvent<HTMLFormElement>) =>void;
+    verificationCode: string;
+    onChange: (ev: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>) => void;
+    onSubmit: MutationFn;
     loading:boolean;
+    processing?:boolean;
 }
 
-const PhoneLoginPresenter:React.SFC<IProps> = ({countryCode, phoneNumber, onInputChange, onSubmit, loading}) => (// add code for loading state
+const VerifyPhonePresenter:React.SFC<IProps> = ({verificationCode, onChange, onSubmit, loading, processing}) => (// add code for loading state
     <Container>
     <Helmet>
-      <title>Phone Login</title>
+      <title>Verify</title>
     </Helmet>
-    <BackArrow backTo={"/"} />
+    <BackArrow backTo={"/phone-login"} />
     <Card>
-    <Title>Enter your Mobile Number</Title>
-    <CountrySelect value={countryCode} name={"countryCode"} onChange={onInputChange}>
-      {countries.map((country, index) => (
-          <CountryOption key={index} value={country.dial_code}>
-          {country.flag} {country.name} ({country.dial_code})
-        </CountryOption>
-      ))}
-    </CountrySelect>
+    <Title>Input your Verification Code</Title>
+
     <FormExtended submitFn={onSubmit}>
-      {loading?
+      {(loading||processing)?
       <Spin className="fa fa-spinner fa-spin"/>
       :<InputTrans
-      placeholder={"01012345678 (No hyphen)"}
+      placeholder={"5 digits"}
       required={true}
-      value={phoneNumber}
-      name={"phoneNumber"}
-      onChange={onInputChange}
+      value={verificationCode}
+      name={"verificationCode"}
+      onChange={onChange}
       />
      }
       
-      {loading ?
+      {(loading||processing) ?
          <div/>
-         :<ButtonExtended value="Send SMS Verification"/>
+         :<ButtonExtended value="Check"/>
       }
       
     </FormExtended>
@@ -133,4 +110,4 @@ const PhoneLoginPresenter:React.SFC<IProps> = ({countryCode, phoneNumber, onInpu
 );  
 
 
-export default PhoneLoginPresenter;
+export default VerifyPhonePresenter;

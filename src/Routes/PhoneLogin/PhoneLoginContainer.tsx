@@ -4,8 +4,8 @@ import PhoneLoginPresenter from "./PhoneLoginPresenter";
 import { RouteComponentProps } from 'react-router-dom';
 import {toast} from "react-toastify";
 import {css} from "glamor";
-import {Mutation, MutationUpdaterFn} from "react-apollo";
-import { PHONE_SIGN_IN } from './PhoneQueries.queries';
+import {Mutation} from "react-apollo";
+import { PHONE_SIGN_IN } from './PhoneQueries';
 import { startPhoneVerificationVariables, startPhoneVerification } from 'src/types/api';
 
 interface IState{
@@ -29,17 +29,52 @@ class PhoneLoginContainer extends React.Component<
     }
 
     public render(){
+        const {history} = this.props;
         const {countryCode, phoneNumber} = this.state;
+        let phoneNumberConverted = phoneNumber;
+        if(phoneNumber.slice(0,1)==='01'){
+            phoneNumberConverted = phoneNumber.slice(1,);
+        }
+        const fullNumber = `${countryCode}${phoneNumberConverted}`
+        // tslint:disalbe-next-line
+        console.log(fullNumber);
         return (
         <PhoneSignInMutation mutation={PHONE_SIGN_IN} variables={
-            {phoneNumber:`${countryCode}${phoneNumber}`}
+            {phoneNumber:`${fullNumber}`}
         }
-        update={this.afterSubmit}
+    
+        onCompleted={data => {
+            const {StartPhoneVerification} = data;
+            if(StartPhoneVerification.ok){
+                toast.success("SMS Sent!\n Redirecting you...", {autoClose:1900, className: css({
+                    background: "#efeff2 !important",
+                    color:"#a1887f",
+                    fontSize:15
+                })});
+                setTimeout(() => {
+                history.push({
+                pathname: "/verify-phone",
+                state: {
+                  fullNumber
+                }
+              });
+            }, 2000);
+            } else {
+                
+                toast.error(StartPhoneVerification.error,{hideProgressBar:true, className: css({
+                    background: "#efeff2 !important",
+                    color:"#a1887f",
+                    fontSize:14
+                })} );
+            }    
+        }}
         >
         {(mutation, {loading}) => {
         const onSubmit:React.FormEventHandler<HTMLFormElement> = (ev) =>{
-            // tslint:disable-next-line
-            const isValid = /^\+[1-9]{1}[0-9]{7,11}$/.test(`${countryCode}${phoneNumber}`);
+            
+            
+            
+            const isValid = /^\+[1-9]{1}[0-9]{7,12}$/.test(fullNumber);
             // tslint:disable-next-line
             if(isValid){
                 mutation();
@@ -74,19 +109,7 @@ class PhoneLoginContainer extends React.Component<
 
     }
 
-    public afterSubmit:MutationUpdaterFn = (cache, result:any) =>{
-        const data:startPhoneVerification = result.data;
-        const {StartPhoneVerification} = data;
-        if(StartPhoneVerification.ok){
-            return;
-        } else {
-            
-            toast.error(StartPhoneVerification.error,{hideProgressBar:true, className: css({
-                background: "#efeff2 !important",
-                color:"#a1887f"
-            })} );
-        }    
-    }
+
 
     
 
