@@ -8,6 +8,7 @@
     ]
   },
   "rules": {
+    "max-classes-per-file":false,
     "no-console": false,
     "member-access": false,
     "object-literal-sort-keys": false,

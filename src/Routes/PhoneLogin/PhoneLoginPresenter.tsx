@@ -78,14 +78,24 @@ const InputTrans = styled(Input)`
     margin-top: 15px;
 `;
 
+const Spin = styled.div`
+    margin-top:30px;
+    margin-bottom: 10px;
+    margin-right:50px;
+    margin-left:50px;
+    font-size:25px;
+`;
+
+
 interface IProps{
     countryCode:string;
     phoneNumber: string;
     onInputChange: (ev: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>) => void;
     onSubmit: (ev: React.FormEvent<HTMLFormElement>) =>void;
+    loading:boolean;
 }
 
-const PhoneLoginPresenter:React.SFC<IProps> = ({countryCode, phoneNumber, onInputChange, onSubmit}) => (
+const PhoneLoginPresenter:React.SFC<IProps> = ({countryCode, phoneNumber, onInputChange, onSubmit, loading}) => (// add code for loading state
     <Container>
     <Helmet>
       <title>Phone Login</title>
@@ -101,24 +111,22 @@ const PhoneLoginPresenter:React.SFC<IProps> = ({countryCode, phoneNumber, onInpu
       ))}
     </CountrySelect>
     <FormExtended submitFn={onSubmit}>
-      <InputTrans
-        placeholder={"01012345678 (No hyphen)"}
-        required={true}
-        value={phoneNumber}
-        name={"phoneNumber"}
-        onChange={onInputChange}
-        />
-      <ButtonExtended value="Send SMS Verification">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill={"white"}
-            >
-            <path d="M7.33 24l-2.83-2.829 9.339-9.175-9.339-9.167 2.83-2.829 12.17 11.996z" />
-          </svg>
-      </ButtonExtended>
+      {loading?
+      <Spin className="fa fa-spinner fa-spin"/>
+      :<InputTrans
+      placeholder={"01012345678 (No hyphen)"}
+      required={true}
+      value={phoneNumber}
+      name={"phoneNumber"}
+      onChange={onInputChange}
+      />
+     }
+      
+      {loading ?
+         <div/>
+         :<ButtonExtended value="Send SMS Verification"/>
+      }
+      
     </FormExtended>
     </Card>
   </Container>

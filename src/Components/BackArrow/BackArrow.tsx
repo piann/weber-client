@@ -7,7 +7,7 @@ const Container = styled.div`
   position: absolute;
   top: 16px;
   left: 16px;
-  background:transparent;
+  
 `;
 
 interface IProps {

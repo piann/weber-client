@@ -4,10 +4,17 @@ import PhoneLoginPresenter from "./PhoneLoginPresenter";
 import { RouteComponentProps } from 'react-router-dom';
 import {toast} from "react-toastify";
 import {css} from "glamor";
+import {Mutation, MutationUpdaterFn} from "react-apollo";
+import { PHONE_SIGN_IN } from './PhoneQueries.queries';
+import { startPhoneVerificationVariables, startPhoneVerification } from 'src/types/api';
 
 interface IState{
     countryCode:string;
     phoneNumber:string;
+}
+
+class PhoneSignInMutation extends Mutation<startPhoneVerification, startPhoneVerificationVariables>{
+
 }
 
 
@@ -23,12 +30,39 @@ class PhoneLoginContainer extends React.Component<
 
     public render(){
         const {countryCode, phoneNumber} = this.state;
-        return <PhoneLoginPresenter 
+        return (
+        <PhoneSignInMutation mutation={PHONE_SIGN_IN} variables={
+            {phoneNumber:`${countryCode}${phoneNumber}`}
+        }
+        update={this.afterSubmit}
+        >
+        {(mutation, {loading}) => {
+        const onSubmit:React.FormEventHandler<HTMLFormElement> = (ev) =>{
+            // tslint:disable-next-line
+            const isValid = /^\+[1-9]{1}[0-9]{7,11}$/.test(`${countryCode}${phoneNumber}`);
+            // tslint:disable-next-line
+            if(isValid){
+                mutation();
+            } else {
+                toast.warn("Please input a valid phone number",{hideProgressBar:true, className: css({
+                    background: "#efeff2 !important",
+                    color:"#a1887f"
+                })});
+            }
+            
+    
+        };
+        return(
+        <PhoneLoginPresenter 
         countryCode={countryCode}
         phoneNumber={phoneNumber}
         onInputChange={this.onInputChange}
-        onSubmit={this.onSubmit}
-        />;
+        onSubmit={onSubmit}
+        loading={loading}
+        />);
+        }}
+        </PhoneSignInMutation>
+        );
     }
 
     public onInputChange: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement> = (ev) => {
@@ -40,22 +74,13 @@ class PhoneLoginContainer extends React.Component<
 
     }
 
-    public onSubmit:React.FormEventHandler<HTMLFormElement> = (ev) =>{
-        const {countryCode, phoneNumber} = this.state;
-        // tslint:disable-next-line
-        const isValid = /^\+[1-9]{1}[0-9]{7,11}$/.test(`${countryCode}${phoneNumber}`);
-        // tslint:disable-next-line
-        if(isValid){
-            return;
-        } else {
-            toast.warn("Please input a valid phone number",{hideProgressBar:true, className: css({
-                background: "#efeff2 !important",
-                color:"#a1887f"
-            })});
-        }
-        
+    public afterSubmit:MutationUpdaterFn = (cache, data) =>{
 
+        // tslint:disalbe-next-line
+        console.log(data);
     }
+
+    
 
 }
 
