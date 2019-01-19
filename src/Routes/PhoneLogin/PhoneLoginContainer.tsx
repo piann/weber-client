@@ -74,10 +74,18 @@ class PhoneLoginContainer extends React.Component<
 
     }
 
-    public afterSubmit:MutationUpdaterFn = (cache, data) =>{
-
-        // tslint:disalbe-next-line
-        console.log(data);
+    public afterSubmit:MutationUpdaterFn = (cache, result:any) =>{
+        const data:startPhoneVerification = result.data;
+        const {StartPhoneVerification} = data;
+        if(StartPhoneVerification.ok){
+            return;
+        } else {
+            
+            toast.error(StartPhoneVerification.error,{hideProgressBar:true, className: css({
+                background: "#efeff2 !important",
+                color:"#a1887f"
+            })} );
+        }    
     }
 
     
