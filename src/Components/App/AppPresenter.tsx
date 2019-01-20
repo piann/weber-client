@@ -9,7 +9,7 @@ import {
 
 import Login from "../../Routes/Login";
 import Home from "../../Routes/Home";
-import SocialLogin from "../../Routes/SocialLogin";
+// import SocialLogin from "../../Routes/SocialLogin";
 import PhoneLogin from "../../Routes/PhoneLogin";
 // import AddPlace from "../../Routes/AddPlace";
 // import EditAccount from "../../Routes/EditAccount";
@@ -32,7 +32,7 @@ const AppPresenter:React.SFC<IProps> = ({isLoggedIn}) =>
 const LoggedOutRoutes: React.SFC = () => (
     <Switch>
         <Route path ={"/"} exact={true} component={Login} />
-        <Route path ={"/social-login"} component={SocialLogin} />
+        {/*<Route path ={"/social-login"} component={SocialLogin} />*/}
         <Route path ={"/phone-login"} component={PhoneLogin} />
         <Route path ={"/verify-phone"} component={VerifyPhone} />
         

@@ -27,7 +27,8 @@ interface IProps {
 const SocialLoginPresenter: React.SFC<IProps> = ({loginCallback}) => (
     <FacebookLogin
     appId="771223983234768"
-    autoLoad="false"
+    autoLoad={false}
+    fields="name,first_name,last_name,email"
     callback={loginCallback}
     render={renderProps => (
       <SocialLogin>

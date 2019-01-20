@@ -35,7 +35,7 @@ const Logo = styled.div`
   font-size: 22px;
 `;
 
-const Content = styled.body`
+const Content = styled.div`
 
 `;
 const Subtitle = styled.h2`

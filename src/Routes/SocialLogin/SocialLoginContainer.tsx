@@ -5,6 +5,8 @@ import { FACEBOOK_CONNECT } from './SocialLoginQueries';
 import SocialLoginPresenter from "./SocialLoginPresenter";
 import {toast} from "react-toastify";
 import {css} from "glamor";
+import { LOG_USER_IN } from 'src/sharedQueries.local';
+
 
 class LoginMutation extends Mutation<
   facebookConnect,
@@ -29,28 +31,39 @@ class SocialLoginContainer extends React.Component<any,IState>{
 
     public render(){
         return(
-        <LoginMutation
-            mutation={FACEBOOK_CONNECT}
-            onCompleted={data => {
-              const { FacebookConnect } = data;
-              if (FacebookConnect.ok) {
-                 alert("good")
-              } else {
-                toast.error(FacebookConnect.error);
-              }
-            }}
-          >
-            {(facebookMutation, { loading }) => {
-              this.facebookMutation = facebookMutation;
-              return (
-                <SocialLoginPresenter loginCallback={this.loginCallback} />
-              );
-            }}
+        <Mutation mutation={LOG_USER_IN}>
+        {
+            logUserIn => (
+                <LoginMutation
+                mutation={FACEBOOK_CONNECT}
+                onCompleted={data => {
+                    const { FacebookConnect } = data;
+                    if (FacebookConnect.ok) {
+                        logUserIn({variables:{
+                            token:FacebookConnect.token
+                        }});
+                    } else {
+                        toast.error(FacebookConnect.error);
+                    }
+                }}
+                >
+                {(facebookMutation, { loading }) => {
+                this.facebookMutation = facebookMutation;
+                return (
+                    <SocialLoginPresenter loginCallback={this.loginCallback} />
+                );
+                }}
           </LoginMutation>
+
+        )
+        }
+        </Mutation>
         )   
     }
 
     public loginCallback = response => {
+        // ts-lint:disable-next-line
+        console.log(response);
         const { name, first_name, last_name, email, id, accessToken } = response;
         if (accessToken) {
           toast.success(`Welcome ${name}!`,{hideProgressBar:true, className: css({
@@ -67,7 +80,7 @@ class SocialLoginContainer extends React.Component<any,IState>{
             }
           });
         } else {
-          toast.error("Could not log you in 😔", {hideProgressBar:true, className: css({
+          toast.error("Fail to facebook log in :(", {hideProgressBar:true, className: css({
             background: "#efeff2 !important",
             color:"#a1887f",
             fontSize:14
