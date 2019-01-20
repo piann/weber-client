@@ -4,7 +4,7 @@ import PhoneLoginPresenter from "./PhoneLoginPresenter";
 import { RouteComponentProps } from 'react-router-dom';
 import {toast} from "react-toastify";
 import {css} from "glamor";
-import {Mutation} from "react-apollo";
+import {Mutation, MutationFn} from "react-apollo";
 import { PHONE_SIGN_IN } from './PhoneQueries';
 import { startPhoneVerificationVariables, startPhoneVerification } from 'src/types/api';
 
@@ -22,7 +22,7 @@ class PhoneLoginContainer extends React.Component<
     RouteComponentProps<any>,
     IState
     >{
-
+    public phoneMutation: MutationFn;
     public state ={
         countryCode: "+82",
         phoneNumber:""
@@ -69,30 +69,14 @@ class PhoneLoginContainer extends React.Component<
             }    
         }}
         >
-        {(mutation, {loading}) => {
-        const onSubmit:React.FormEventHandler<HTMLFormElement> = (ev) =>{
-            
-            
-            
-            const isValid = /^\+[1-9]{1}[0-9]{7,12}$/.test(fullNumber);
-            // tslint:disable-next-line
-            if(isValid){
-                mutation();
-            } else {
-                toast.warn("Please input a valid phone number",{hideProgressBar:true, className: css({
-                    background: "#efeff2 !important",
-                    color:"#a1887f"
-                })});
-            }
-            
-    
-        };
+        {(phoneMutation, {loading}) => {
+        this.phoneMutation = phoneMutation;
         return(
         <PhoneLoginPresenter 
         countryCode={countryCode}
         phoneNumber={phoneNumber}
         onInputChange={this.onInputChange}
-        onSubmit={onSubmit}
+        onSubmit={this.onSubmit}
         loading={loading}
         />);
         }}
@@ -110,7 +94,26 @@ class PhoneLoginContainer extends React.Component<
     }
 
 
+    public onSubmit:React.FormEventHandler<HTMLFormElement> = (ev) =>{
+        const {countryCode, phoneNumber} = this.state;
+        let phoneNumberConverted = phoneNumber;
+        if(phoneNumber.slice(0,2)==='01'){
+            phoneNumberConverted = phoneNumber.slice(1,);
+        }
+        const fullNumber = `${countryCode}${phoneNumberConverted}`
+        const isValid = /^\+[1-9]{1}[0-9]{7,12}$/.test(fullNumber);
+        // tslint:disable-next-line
+        if(isValid){
+            this.phoneMutation();
+        } else {
+            toast.warn("Please input a valid phone number",{hideProgressBar:true, className: css({
+                background: "#efeff2 !important",
+                color:"#a1887f"
+            })});
+        }
+        
 
+    };
     
 
 }
