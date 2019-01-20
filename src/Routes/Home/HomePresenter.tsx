@@ -10,7 +10,7 @@ interface IProps extends RouteComponentProps<any>{
 
 
 const HomePresenter: React.SFC<IProps> = () => (
-<span>stuff</span>
+<span>This Home</span>
 );
 
 export default HomePresenter;

@@ -91,7 +91,7 @@ const VerifyPhonePresenter:React.SFC<IProps> = ({verificationCode, onChange, onS
       {(loading||processing)?
       <Spin className="fa fa-spinner fa-spin"/>
       :<InputTrans
-      placeholder={"5 digits"}
+      placeholder={""}
       required={true}
       value={verificationCode}
       name={"verificationCode"}

@@ -8,17 +8,17 @@ Client for 'We'ber that is Clone of 'U'ber
 - [x] Home
 - [x] Phone Login
 - [x] Verify Phone Number
-- [x] Social Login
+- [ ] Social Login
 
 ### Logged In:
 
-- [x] Home
-- [x] Ride
-- [x] Chat
-- [x] Edit Account
-- [x] Settings
-- [x] Places
-- [x] Add Place
-- [x] Find Address
+- [ ] Home
+- [ ] Ride
+- [ ] Chat
+- [ ] Edit Account
+- [ ] Settings
+- [ ] Places
+- [ ] Add Place
+- [ ] Find Address
 - [ ] Challenge: Ride History
 - [ ] Challenge: Email Sign In

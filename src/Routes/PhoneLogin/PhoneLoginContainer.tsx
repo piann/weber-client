@@ -32,7 +32,7 @@ class PhoneLoginContainer extends React.Component<
         const {history} = this.props;
         const {countryCode, phoneNumber} = this.state;
         let phoneNumberConverted = phoneNumber;
-        if(phoneNumber.slice(0,1)==='01'){
+        if(phoneNumber.slice(0,2)==='01'){
             phoneNumberConverted = phoneNumber.slice(1,);
         }
         const fullNumber = `${countryCode}${phoneNumberConverted}`
