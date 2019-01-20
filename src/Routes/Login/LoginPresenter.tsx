@@ -3,6 +3,7 @@ import Helmet from "react-helmet";
 import { RouteComponentProps, Link} from 'react-router-dom';
 import frontImg from "../../images/front.png";
 import styled from "../../typed-components";
+import SocialLoginContainer from "../SocialLogin"
 
 const Container = styled.div`
     height : 100vh;
@@ -56,16 +57,7 @@ const Grey = styled.span`
   margin-left: 10px;
 `;
 
-const SocialLogin = styled.div`
-  border-top: 1px solid ${props => props.theme.greyColor};
-  padding: 30px 20px;
-`;
 
-const SocialLink = styled.span`
-  color: ${props => props.theme.greenColor};
-  font-size: 16px;
-  cursor: pointer;
-`;
 
 
 
@@ -93,11 +85,11 @@ const LoginPresenter: React.SFC<IProps> = () => (
           </Link>
         </PhoneLogin>
       
-        <SocialLogin>
-        <Link to={"/social-login"}>
-          <SocialLink>Or connect with Facebook</SocialLink>
-        </Link>
-        </SocialLogin>
+      
+        <SocialLoginContainer/>
+        
+        
+        
     </Content>
   </Container>    
 );
