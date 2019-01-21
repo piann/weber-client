@@ -8,6 +8,7 @@ import emptyProfile from "../../images/emptyProfile.svg";
 import trip from "../../images/trip.svg";
 import setting from "../../images/setting.svg";
 import edit from "../../images/edit.svg";
+import { userProfile } from 'src/types/api';
 
 const Container = styled.div`
 
@@ -50,6 +51,11 @@ const ProfileImage = styled.img`
     width:63px;
 `;
 
+const FacebookImage = styled.img`
+    height:90px;
+    width:90px;
+`;
+
 const Text = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -78,11 +84,15 @@ const SLink = styled(Link)`
   font-weight: 400;
 `;
 
-const ToggleDriving = styled("button")`
+interface IToggleProps{
+    isDriving:boolean;
+}
+
+const ToggleDriving = styled<IToggleProps&any>("button")`
   -webkit-appearance: none;
   width: 100%;
   color: white;
-  background-color:${props=> props.theme.blueColor};
+  background-color:${props=> props.isDriving? props.theme.yelloColor :props.theme.blueColor};
   font-size: 20px;
   border: 0;
   padding: 15px 0px;
@@ -95,24 +105,35 @@ const SmallIcon = styled.img`
     margin-right:13px;
 `;
 
-const MenuPresenter:React.SFC = () =>(
-    <Container>
-        <MenuHeader>
-            <CloudWrapper>
-                <ProfileCircle>
-                    <ProfileImage src={emptyProfile}/>
-                </ProfileCircle>
-                <Text>
-                    <Name>DongSu Park</Name>
-                    <Rating>3.7</Rating>
-                </Text>
-            </CloudWrapper>
-            <SLink to="/edit-account"><SmallIcon src={edit}/>Edit Account</SLink>
-            <SLink to="/trips"><SmallIcon src={trip}/>Your Trips</SLink>
-            <SLink to="/settings"><SmallIcon src={setting}/>Settings</SLink>
-            <ToggleDriving>Start Driving</ToggleDriving>
-        </MenuHeader>
+interface IProps{
+    data?:userProfile;
+    loading:boolean;
+}
 
+const MenuPresenter:React.SFC<IProps> = ({
+    data:{GetMyProfile:{user=null}={}}={}, loading
+    }) =>(
+    <Container>
+        {!loading && user &&
+        (<React.Fragment>
+            <MenuHeader>
+                <CloudWrapper>
+                    <ProfileCircle>
+                        {user.profilePhoto? <FacebookImage src={user.profilePhoto}/>:<ProfileImage src={emptyProfile}/> }
+                    </ProfileCircle>
+                    <Text>
+                        <Name>{user.fullName || "Name Unknown"}</Name>
+                        <Rating>3.7</Rating>
+                    </Text>
+                </CloudWrapper>
+                <SLink to="/edit-account"><SmallIcon src={edit}/>Edit Account</SLink>
+                <SLink to="/trips"><SmallIcon src={trip}/>Your Trips</SLink>
+                <SLink to="/settings"><SmallIcon src={setting}/>Settings</SLink>
+                <ToggleDriving isDriving={user.isDriving}>{user.isDriving? "Stop Driving":"Start Driving"}</ToggleDriving>
+            </MenuHeader>
+
+        </React.Fragment>)
+        }
 
     </Container>
 

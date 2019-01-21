@@ -17,12 +17,13 @@ const SideBarButton = styled.svg`
 
 interface IProps{
     isMenuOpen:boolean;
-    toggleMenu:()=>void
+    toggleMenu:()=>void;
+    loading:boolean;
 }
 
 
 
-const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu}) => {
+const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading}) => {
     
     return (
     <Container>
@@ -40,9 +41,10 @@ const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu}) => {
             zIndex:"10"
          } }}
         >
-        <SideBarButton onClick={toggleMenu} xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24">
+
+        {!loading && <SideBarButton onClick={toggleMenu} xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24">
             <path d="M24 6h-24v-4h24v4zm0 4h-24v4h24v-4zm0 8h-24v4h24v-4z"/> 
-        </SideBarButton>
+        </SideBarButton>}
       </Sidebar>
     </Container>
 )};
