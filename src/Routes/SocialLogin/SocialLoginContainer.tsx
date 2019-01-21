@@ -13,20 +13,9 @@ class LoginMutation extends Mutation<
   facebookConnectVariables
 > {}
 
-interface IState{
-    firstName : string;
-    lastName :string;
-    email?: string;
-    fbId: string;
-}
 
-class SocialLoginContainer extends React.Component<any,IState>{
-    public state = {
-        email: "",
-        fbId: "",
-        firstName: "",
-        lastName: ""
-      };
+class SocialLoginContainer extends React.Component<any,any>{
+    
     public facebookMutation:MutationFn;
 
     public render(){

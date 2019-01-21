@@ -8,7 +8,7 @@ Client for 'We'ber that is Clone of 'U'ber
 - [x] Home
 - [x] Phone Login
 - [x] Verify Phone Number
-- [ ] Social Login
+- [x] Social Login
 
 ### Logged In:
 

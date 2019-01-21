@@ -15,7 +15,8 @@
     "ordered-imports": false,
     "interface-name": false,
     "strict-null-checks": false,
-    "jsx-no-lambda":false
+    "jsx-no-lambda":false,
+    
   },
   "rulesDirectory": []
 
