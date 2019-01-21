@@ -5,6 +5,8 @@ export interface IThemeInterface {
     greenColor:string;
     greyColor:string;
     indigoColor:string;
+    yelloColor:string;
+    blueColor:string;
 }
 
 const {
