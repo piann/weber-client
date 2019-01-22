@@ -8,7 +8,9 @@ import emptyProfile from "../../images/emptyProfile.svg";
 import trip from "../../images/trip.svg";
 import setting from "../../images/setting.svg";
 import edit from "../../images/edit.svg";
-import { userProfile } from 'src/types/api';
+import {toggleDriving, userProfile} from 'src/types/api';
+import {MutationFn} from "react-apollo";
+
 
 const Container = styled.div`
 
@@ -108,10 +110,11 @@ const SmallIcon = styled.img`
 interface IProps{
     data?:userProfile;
     loading:boolean;
+    toggleDrivingFn:MutationFn<toggleDriving>;
 }
 
 const MenuPresenter:React.SFC<IProps> = ({
-    data:{GetMyProfile:{user=null}={}}={}, loading
+    data:{GetMyProfile:{user=null}={}}={}, loading, toggleDrivingFn
     }) =>(
     <Container>
         {!loading && user &&
@@ -129,7 +132,7 @@ const MenuPresenter:React.SFC<IProps> = ({
                 <SLink to="/edit-account"><SmallIcon src={edit}/>Edit Account</SLink>
                 <SLink to="/trips"><SmallIcon src={trip}/>Your Trips</SLink>
                 <SLink to="/settings"><SmallIcon src={setting}/>Settings</SLink>
-                <ToggleDriving isDriving={user.isDriving}>{user.isDriving? "Stop Driving":"Start Driving"}</ToggleDriving>
+                <ToggleDriving isDriving={user.isDriving} onClick={toggleDrivingFn}>{user.isDriving? "Stop Driving":"Start Driving"}</ToggleDriving>
             </MenuHeader>
 
         </React.Fragment>)
