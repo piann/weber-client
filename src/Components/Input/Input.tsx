@@ -3,7 +3,6 @@ import styled from "../../typed-components";
 
 const Container = styled.input`
   border: none;
-
   border-bottom: 2px solid ${props => props.theme.greyColor};
   font-size: 17px;
   width: 100%;
@@ -43,7 +42,7 @@ const Input: React.SFC<IProps> = ({
   className
 }) => (
   <Container
-    autoComplete={"false"}
+    autoComplete={"off"}
     className={className}
     onChange={onChange}
     name={name}

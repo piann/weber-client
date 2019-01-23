@@ -77,7 +77,7 @@ const LoginPresenter: React.SFC<IProps> = () => (
     <Content>
       
         <PhoneLogin>
-          <Subtitle>Add Wing to Your Life</Subtitle>
+          <Subtitle>Do Drive, Together</Subtitle>
           <Link to={"/phone-login"}>
           <FakeInput>
             🇰🇷 +82 <Grey>Enter your mobile number</Grey>

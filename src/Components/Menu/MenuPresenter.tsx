@@ -84,6 +84,7 @@ const SLink = styled(Link)`
   margin-top:26px;
   margin-bottom: 26px;
   font-weight: 400;
+  
 `;
 
 interface IToggleProps{

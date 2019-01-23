@@ -12,7 +12,7 @@ import Home from "../../Routes/Home";
 // import SocialLogin from "../../Routes/SocialLogin";
 import PhoneLogin from "../../Routes/PhoneLogin";
 // import AddPlace from "../../Routes/AddPlace";
-// import EditAccount from "../../Routes/EditAccount";
+import EditAccount from "../../Routes/EditAccount";
 // import FindAddress from "../../Routes/FindAddress";
 // import Places from "../../Routes/Places";
 // import Ride from "../../Routes/Ride";
@@ -43,8 +43,8 @@ const LoggedOutRoutes: React.SFC = () => (
     const LoggedInRoutes: React.SFC = () => (
     <Switch>
         <Route path ={"/"} exact={true} component={Home} />
-        {/*<Route path ={"/ride"} component={Ride} />
         <Route path ={"/edit-account"} component={EditAccount} />
+        {/*<Route path ={"/ride"} component={Ride} />
         <Route path ={"/settings"} component={Settings} />
         <Route path ={"/places"} component={Places} />
         <Route path ={"/add-place"} component={AddPlace} />

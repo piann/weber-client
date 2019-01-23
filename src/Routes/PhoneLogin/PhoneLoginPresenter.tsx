@@ -2,12 +2,14 @@ import React from "react";
 import Helmet from "react-helmet"; 
 // import {RouteComponentProps} from 'react-router-dom';
 import styled from "../../typed-components";
-import BackArrow from "../../Components/BackArrow";
+// import HeaderBar from "../../Components/HeaderBar";
 import countries from "../../countries";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import Form from "../../Components/Form";
 import whiteCar from "../../images/whiteCar.png";
+import BackArrow from 'src/Components/BackArrow';
+import LoadingSpin from 'src/Components/LoadingSpin';
 
 const Container = styled.div`
     min-height: 600px;
@@ -26,7 +28,7 @@ const Title = styled.div`
 
 const Card = styled.div`
   position:absolute;
-  top:80px;
+  top:110px;
   left:0;
   right:0;
   margin-left:auto;
@@ -61,6 +63,7 @@ const CountrySelect = styled.select`
 const CountryOption = styled.option``;
 
 
+
 const ButtonExtended = styled(Button)`
     margin-top:40px;
     background-color:rgba(0,0,0,1);
@@ -76,14 +79,13 @@ const FormExtended = styled(Form)`
 const InputTrans = styled(Input)`
     background:transparent;
     margin-top: 15px;
+  
 `;
 
-const Spin = styled.div`
-    margin-top:30px;
-    margin-bottom: 10px;
-    margin-right:50px;
-    margin-left:50px;
-    font-size:25px;
+const BackArrowExtended = styled(BackArrow)`
+  position:absolute;
+  top:16px;
+  left:12px;
 `;
 
 
@@ -100,7 +102,7 @@ const PhoneLoginPresenter:React.SFC<IProps> = ({countryCode, phoneNumber, onInpu
     <Helmet>
       <title>Phone Login</title>
     </Helmet>
-    <BackArrow backTo={"/"} />
+    <BackArrowExtended backTo={"/"}/>
     <Card>
     <Title>Enter your Mobile Number</Title>
     <CountrySelect value={countryCode} name={"countryCode"} onChange={onInputChange}>
@@ -112,7 +114,7 @@ const PhoneLoginPresenter:React.SFC<IProps> = ({countryCode, phoneNumber, onInpu
     </CountrySelect>
     <FormExtended submitFn={onSubmit}>
       {loading?
-      <Spin className="fa fa-spinner fa-spin"/>
+      <LoadingSpin/>
       :<InputTrans
       placeholder={"01012345678 (No hyphen)"}
       required={true}

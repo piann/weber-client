@@ -8,6 +8,7 @@ import Button from "../../Components/Button";
 import Form from "../../Components/Form";
 import whiteCar from "../../images/whiteCar.png";
 import { MutationFn } from 'react-apollo';
+import LoadingSpin from 'src/Components/LoadingSpin';
 
 const Container = styled.div`
     min-height: 600px;
@@ -60,14 +61,11 @@ const InputTrans = styled(Input)`
     margin-top: 15px;
 `;
 
-const Spin = styled.div`
-    margin-top:30px;
-    margin-bottom: 10px;
-    margin-right:50px;
-    margin-left:50px;
-    font-size:25px;
+const BackArrowExtended = styled(BackArrow)`
+  position:absolute;
+  top:16px;
+  left:12px;
 `;
-
 
 
 interface IProps{
@@ -83,13 +81,13 @@ const VerifyPhonePresenter:React.SFC<IProps> = ({verificationCode, onChange, onS
     <Helmet>
       <title>Verify</title>
     </Helmet>
-    <BackArrow backTo={"/phone-login"} />
+    <BackArrowExtended backTo={"/phone-login"} />
     <Card>
     <Title>Input your Verification Code</Title>
 
     <FormExtended submitFn={onSubmit}>
       {(loading||processing)?
-      <Spin className="fa fa-spinner fa-spin"/>
+      <LoadingSpin/>
       :<InputTrans
       placeholder={""}
       required={true}

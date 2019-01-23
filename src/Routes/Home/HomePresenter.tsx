@@ -10,8 +10,8 @@ const Container = styled.div`
 
 const SideBarButton = styled.svg`
     float:right;
-    margin-top:18px;
-    margin-right:18px;
+    margin-top:19px;
+    margin-right:20px;
 `;
 
 
