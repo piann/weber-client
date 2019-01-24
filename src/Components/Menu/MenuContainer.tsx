@@ -50,7 +50,7 @@ class MenuContainer extends React.Component{
             }
             >
                 {toggleDrivingFn => (
-                    <ProfileQuery query={USER_PROFILE}>
+                    <ProfileQuery query={USER_PROFILE} fetchPolicy={"cache-and-network"}>
                     {
                         ({data, loading}) => (<MenuPresenter data={data} loading={loading} toggleDrivingFn={toggleDrivingFn}/>)
                     }

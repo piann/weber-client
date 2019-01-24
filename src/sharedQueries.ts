@@ -7,6 +7,9 @@ export const USER_PROFILE = gql`
       error
       user {
         id
+        firstName
+        lastName
+        email
         profilePhoto
         fullName
         isDriving

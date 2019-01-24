@@ -5,7 +5,7 @@ import HeaderBar from 'src/Components/HeaderBar';
 import Form from "../../Components/Form";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
-
+import {MutationFn} from "react-apollo";
 
 const Container = styled.div`
     height:100vh;
@@ -36,11 +36,13 @@ interface IProps{
     firstName:string
     lastName:string
     email:string
+    profilePhoto?:string
     onInputChange: (event:any) => void;
+    onSubmit:MutationFn
     loading:boolean
 }
 
-const EditAccountPresenter: React.SFC<IProps> = ({firstName, lastName, email, onInputChange, loading}) =>{
+const EditAccountPresenter: React.SFC<IProps> = ({firstName, lastName, email, profilePhoto, onInputChange, onSubmit, loading}) =>{
 
     return( 
         <Container>
@@ -55,7 +57,7 @@ const EditAccountPresenter: React.SFC<IProps> = ({firstName, lastName, email, on
             <Headline>
                 <HeaderBar backTo={"/"} text={"Edit Account"}/>
             </Headline>
-            <FormExtended submitFn={()=>("")}>
+            <FormExtended submitFn={onSubmit}>
             <InputExtended
             onChange={onInputChange}
             type={"text"}
@@ -77,7 +79,7 @@ const EditAccountPresenter: React.SFC<IProps> = ({firstName, lastName, email, on
             placeholder={"Email"}
             name={"email"}
             />
-            <Button onClick={null} value={"Complete"}/>
+            <Button onClick={null} value={"Complete"} />
             </FormExtended>
             </React.Fragment>
         }
