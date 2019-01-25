@@ -13,14 +13,15 @@ const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans|Shadows+Into+Light');
 @import url('https://fonts.googleapis.com/css?family=Baloo+Thambi');
 @import url('https://fonts.googleapis.com/css?family=Alegreya+Sans+SC');
-
+@import url('https://fonts.googleapis.com/css?family=Hi+Melody');
+@import url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMDOHYEON.woff') 
 
     ${reset}
     * {
         box-sizing: border
     }
     body{
-        font-family: 'Maven Pro', sans-serif;
+        font-family: 'Maven Pro','BMDOHYEON', sans-serif;
     }
     a{
         color:inherit;

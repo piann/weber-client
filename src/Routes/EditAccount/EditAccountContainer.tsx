@@ -7,11 +7,15 @@ import { EDIT_ACCOUNT } from './EditAccountQueries';
 import { USER_PROFILE } from 'src/sharedQueries';
 import {toast} from "react-toastify";
 import {css} from "glamor";
+import axios from "axios";
 
 interface IState {
     firstName: string
     lastName:string
     email:string
+    profilePhoto:string
+    uploading:boolean
+    
 }
 interface IProps extends RouteComponentProps<any>{}
 
@@ -24,12 +28,13 @@ class EditAccountContainer extends React.Component<IProps, IState>{
         firstName:"",
         lastName:"",
         email:"",
-        profilePhoto:""
+        profilePhoto:"",
+        uploading:false,
     };
        
     render(){
         const {history} = this.props;    
-        const {firstName, lastName, email, profilePhoto} = this.state;
+        const {firstName, lastName, email, profilePhoto, uploading} = this.state;
         return(
         <ProfileQuery query={USER_PROFILE} fetchPolicy={"cache-and-network"}
         onCompleted={this.updateFields}>
@@ -68,6 +73,7 @@ class EditAccountContainer extends React.Component<IProps, IState>{
                 profilePhoto={profilePhoto}
                 onInputChange={this.onInputChange}
                 loading={loading}
+                uploading={uploading}
                 onSubmit={editAccountMutation}
                 />)
         }
@@ -79,8 +85,34 @@ class EditAccountContainer extends React.Component<IProps, IState>{
         )
     };
 
-    public onInputChange: React.ChangeEventHandler<HTMLInputElement> = ev =>{
-        const {target : {name, value}} = ev;
+    public onInputChange: React.ChangeEventHandler<HTMLInputElement> = async ev =>{
+        const {target : {name, value, files}} = ev;
+        if(files){
+            this.setState({
+               uploading:true,
+           });
+           toast.error("Uploading.. Please Wait...",{hideProgressBar:true, className: css({
+            background: "#efeff2 !important",
+            color:"#a1887f",
+            fontSize:14
+            })} );
+
+           const formData = new FormData();
+           formData.append("file", files[0]);
+           formData.append("api_key", "335519661528433");
+           formData.append("upload_preset", "jyit0qel");
+           formData.append("timestamp",String(Date.now()/1000));
+           const {data:{secure_url}} = await axios.post("https://api.cloudinary.com/v1_1/piann/image/upload", formData);
+           if(secure_url){
+               this.setState({
+                   profilePhoto:secure_url,
+                   uploading:false,
+               })
+           }
+
+
+        }
+
         this.setState({[name]:value} as any);
     };
 
@@ -102,5 +134,7 @@ class EditAccountContainer extends React.Component<IProps, IState>{
         
         
     }
+
+    
 }
 export default EditAccountContainer;
