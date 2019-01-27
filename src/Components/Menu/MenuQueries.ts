@@ -8,3 +8,12 @@ export const TOGGLE_DRIVING = gql`
         }
     }
 `;
+
+export const MODIFY_DRIVING_STATUS = gql`
+    mutation modifyDrivingStatus($driverModeOn:Boolean, $isDriving:Boolean){
+        ModifyDrivingStatus(driverModeOn:$driverModeOn, isDriving:$isDriving){
+            ok
+            error
+        }
+    }
+`;

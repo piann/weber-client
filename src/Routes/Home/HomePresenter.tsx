@@ -2,7 +2,7 @@ import React from "react";
 import Helmet from "react-helmet";
 import styled from "../../typed-components";
 import Sidebar from "react-sidebar";
-import MenuContainer from 'src/Components/Menu';
+import Menu from 'src/Components/Menu';
 
 const Container = styled.div`
 
@@ -32,7 +32,7 @@ const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading}) => 
         </Helmet>
         <Sidebar
         open={isMenuOpen}
-        sidebar={<MenuContainer/>}
+        sidebar={<Menu/>}
         pullRight={true}
         onSetOpen={toggleMenu}
         styles={{ sidebar: {

@@ -12,6 +12,7 @@ export const USER_PROFILE = gql`
         email
         profilePhoto
         fullName
+        driverModeOn
         isDriving
       }
     }

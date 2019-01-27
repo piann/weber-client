@@ -4,6 +4,7 @@ import styled from "../../typed-components";
 const Container = styled.input`
   border: none;
   border-bottom: 2px solid ${props => props.theme.greyColor};
+  font-family: 'Maven Pro','BMDOHYEON', sans-serif;
   font-size: 17px;
   width: 100%;
   padding-bottom: 10px;

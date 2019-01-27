@@ -19,6 +19,28 @@ export interface toggleDriving {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: modifyDrivingStatus
+// ====================================================
+
+export interface modifyDrivingStatus_ModifyDrivingStatus {
+  __typename: "ModifyDrivingStatusResponse";
+  ok: boolean;
+  error: string | null;
+}
+
+export interface modifyDrivingStatus {
+  ModifyDrivingStatus: modifyDrivingStatus_ModifyDrivingStatus;
+}
+
+export interface modifyDrivingStatusVariables {
+  driverModeOn: boolean;
+  isDriving?: boolean | null;
+}
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: editAccount
 // ====================================================
 
@@ -123,6 +145,7 @@ export interface userProfile_GetMyProfile_user {
   email: string | null;
   profilePhoto: string | null;
   fullName: string;
+  driverModeOn: boolean;
   isDriving: boolean;
 }
 
