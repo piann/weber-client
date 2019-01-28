@@ -33,7 +33,7 @@ export interface modifyDrivingStatus {
 }
 
 export interface modifyDrivingStatusVariables {
-  driverModeOn: boolean;
+  driverModeOn?: boolean | null;
   isDriving?: boolean | null;
 }
 
@@ -158,6 +158,32 @@ export interface userProfile_GetMyProfile {
 
 export interface userProfile {
   GetMyProfile: userProfile_GetMyProfile;
+}
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: getPlaces
+// ====================================================
+
+export interface getPlaces_GetMyPlace_places {
+  __typename: "Place";
+  id: number;
+  name: string;
+  address: string;
+  isFav: boolean;
+}
+
+export interface getPlaces_GetMyPlace {
+  __typename: "GetMyPlaceResponse";
+  ok: boolean;
+  error: string | null;
+  places: (getPlaces_GetMyPlace_places | null)[] | null;
+}
+
+export interface getPlaces {
+  GetMyPlace: getPlaces_GetMyPlace;
 }
 
 /* tslint:disable */
