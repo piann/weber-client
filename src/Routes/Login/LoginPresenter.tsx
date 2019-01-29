@@ -17,7 +17,10 @@ const Gate = styled.div`
     justify-content:center;
 `;
 
-const Title = styled.h1``;
+const Title = styled.span`
+   font-family: 'Shadows Into Light', cursive;
+   font-size:23px;
+`;
 
 const Logo = styled.div`
   margin:16vh;

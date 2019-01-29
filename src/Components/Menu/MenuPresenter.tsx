@@ -6,7 +6,9 @@ import { Link } from "react-router-dom";
 import direction from "../../images/direction.jpg"
 import emptyProfile from "../../images/emptyProfile.svg";
 import trip from "../../images/trip.svg";
-import setting from "../../images/setting.svg";
+// import setting from "../../images/setting.svg";
+import history from "../../images/history.svg";
+
 import edit from "../../images/edit.svg";
 import {userProfile} from 'src/types/api';
 import RadioButtonTF from '../RadioButtonTF';
@@ -132,8 +134,8 @@ const MenuPresenter:React.SFC<IProps> = ({
                     </Text>
                 </CloudWrapper>
                 <SLink to="/edit-account"><SmallIcon src={edit}/>Edit Account</SLink>
-                <SLink to="/trips"><SmallIcon src={trip}/>Your Trips</SLink>
-                <SLink to="/settings"><SmallIcon src={setting}/>Settings</SLink>
+                <SLink to="/places"><SmallIcon src={trip}/>Your Places</SLink>
+                <SLink to="/history"><SmallIcon src={history}/>Trip History</SLink>
                 <RadioButtonTF driverModeOn={user.driverModeOn} onSelectChange={onSelectChange}/>
                 {!user.driverModeOn?<></>:
                 <ToggleDriving name={"isDriving"} isDriving={user.isDriving} onClick={onSelectChange}>{user.isDriving? "Stop Driving":"Start Driving"}</ToggleDriving>

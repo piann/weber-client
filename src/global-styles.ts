@@ -22,6 +22,7 @@ const GlobalStyle = createGlobalStyle`
     }
     body{
         font-family: 'Maven Pro','BMDOHYEON', sans-serif;
+        margin:0
     }
     a{
         color:inherit;
