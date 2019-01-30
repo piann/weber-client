@@ -2,11 +2,16 @@ import FindAddressPresenter from "./FindAddressPresenter";
 import React from "react";
 import ReactDOM from "react-dom";
 
+interface IState{
+    lat:number
+    lng:number
+}
 
-class FindAddressContainer extends React.Component<any>{
+
+class FindAddressContainer extends React.Component<any, IState>{
     public mapRef:any;
     public map: google.maps.Map;
-
+    
     constructor(props){
         super(props);
         this.mapRef = React.createRef();
@@ -15,12 +20,12 @@ class FindAddressContainer extends React.Component<any>{
         navigator.geolocation.getCurrentPosition(this.handleGeoSuccess, this.handleGeoError);
     }
     public render(){
-        console.log(this.props);
         return(<FindAddressPresenter mapRef={this.mapRef}/>);
     }
 
     public handleGeoSuccess = (position:Position) => {
         const {coords:{latitude, longitude}} = position;
+        this.setState({lat:latitude, lng:longitude});
         this.loadMap(latitude, longitude);
     }
     public handleGeoError = () => {
@@ -38,6 +43,16 @@ class FindAddressContainer extends React.Component<any>{
             disableDefaultUI:true
         }
         this.map = new maps.Map(mapNode, mapConfig);
+        this.map.addListener("dragend", this.handleDragEnd);
+
+    }
+
+    public handleDragEnd = () =>{
+        const newCenter = this.map.getCenter();
+        const lat = newCenter.lat();
+        const lng = newCenter.lng();
+        this.setState({lat, lng});
+       
     }
 }
 
