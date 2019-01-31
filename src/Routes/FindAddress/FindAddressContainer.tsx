@@ -32,6 +32,7 @@ class FindAddressContainer extends React.Component<any, IState>{
             address={this.state.address}
             onInputChange={this.onInputChange}
             onInputBlur={this.onInputBlur}
+            onPickPlace={this.onPickPlace}
             />
             
         );
@@ -100,10 +101,6 @@ class FindAddressContainer extends React.Component<any, IState>{
             lng
         });
         this.reverseGeoCodeAddress(lat,lng);
-          
-        
-        
-       
     }
 
     public reverseGeoCodeAddress = async (lat:number, lng:number) => {
@@ -113,6 +110,11 @@ class FindAddressContainer extends React.Component<any, IState>{
                 address
             })
         }
+    }
+
+    public onPickPlace = () => {
+        const { lat, lng, address } = this.state;
+        console.log(lat, lng, address);
     }
 }
 
