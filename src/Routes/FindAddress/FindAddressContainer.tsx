@@ -1,17 +1,23 @@
 import FindAddressPresenter from "./FindAddressPresenter";
 import React from "react";
 import ReactDOM from "react-dom";
+import { reverseGeoCode } from 'src/mapHelpers';
 
 interface IState{
     lat:number
     lng:number
+    address:string
 }
 
 
 class FindAddressContainer extends React.Component<any, IState>{
     public mapRef:any;
     public map: google.maps.Map;
-    
+    public state = {
+        lat:0,
+        lng:0,
+        address:""
+    }
     constructor(props){
         super(props);
         this.mapRef = React.createRef();
@@ -20,7 +26,14 @@ class FindAddressContainer extends React.Component<any, IState>{
         navigator.geolocation.getCurrentPosition(this.handleGeoSuccess, this.handleGeoError);
     }
     public render(){
-        return(<FindAddressPresenter mapRef={this.mapRef}/>);
+        return(<FindAddressPresenter 
+            mapRef={this.mapRef}
+            address={this.state.address}
+            onInputChange={this.onInputChange}
+            onInputBlur={()=>""}
+            />
+            
+        );
     }
 
     public handleGeoSuccess = (position:Position) => {
@@ -47,11 +60,41 @@ class FindAddressContainer extends React.Component<any, IState>{
 
     }
 
-    public handleDragEnd = () =>{
+    public onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const {
+          target: { name, value }
+        } = event;
+        this.setState({
+          [name]: value
+        } as any);
+      };
+
+    public onInputBlur = async () => {
+
+        // const { address } = this.state;
+        // const result = await geoCode(address);
+        // if (result !== false) {
+        //   const { lat, lng, formatted_address: formatedAddress } = result;
+        //   this.setState({
+        //     address: formatedAddress,
+        //     lat,
+        //     lng
+        //   });
+        //   this.map.panTo({ lat, lng });
+        // }
+      };
+
+    public handleDragEnd = async () =>{
         const newCenter = this.map.getCenter();
         const lat = newCenter.lat();
         const lng = newCenter.lng();
-        this.setState({lat, lng});
+        const address:string = await reverseGeoCode(lat,lng);
+        this.setState({
+            address,
+            lat,
+            lng
+        });
+        console.log(this.state);
        
     }
 }
