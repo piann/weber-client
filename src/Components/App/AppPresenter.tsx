@@ -11,7 +11,7 @@ import Login from "../../Routes/Login";
 import Home from "../../Routes/Home";
 // import SocialLogin from "../../Routes/SocialLogin";
 import PhoneLogin from "../../Routes/PhoneLogin";
-// import AddPlace from "../../Routes/AddPlace";
+import AddPlace from "../../Routes/AddPlace";
 import EditAccount from "../../Routes/EditAccount";
 import FindAddress from "../../Routes/FindAddress";
 import Places from "../../Routes/Places";
@@ -46,8 +46,8 @@ const LoggedOutRoutes: React.SFC = () => (
         <Route path ={"/edit-account"} component={EditAccount} />
         <Route path ={"/places"} component={Places} />
         <Route path ={"/find-address"} component={FindAddress} /> 
-        {/*<Route path ={"/ride"} component={Ride} />
         <Route path ={"/add-place"} component={AddPlace} />
+        {/*<Route path ={"/ride"} component={Ride} />
         <Route path ={"/settings"} component={Settings} />
         <Redirect from={"*"} to={"/"} />*/}
 

@@ -12,13 +12,13 @@ Client for 'We'ber that is Clone of 'U'ber
 
 ### Logged In:
 
-- [ ] Home
-- [ ] Ride
+- [x] Home
+- [x] Ride
 - [ ] Chat
-- [ ] Edit Account
+- [x] Edit Account
 - [ ] Settings
-- [ ] Places
+- [x] Places
 - [ ] Add Place
-- [ ] Find Address
+- [x] Find Address
 - [ ] Challenge: Ride History
 - [ ] Challenge: Email Sign In

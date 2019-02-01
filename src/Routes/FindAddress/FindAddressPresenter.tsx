@@ -51,6 +51,7 @@ class FindAddressPresenter extends React.Component<IProps>{
 
     public render(){
         const {
+            
             mapRef,
             address,
             onInputChange,
