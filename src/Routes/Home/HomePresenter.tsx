@@ -9,15 +9,23 @@ const Container = styled.div`
 `;
 
 const SideBarButton = styled.svg`
-    float:right;
-    margin-top:19px;
-    margin-right:20px;
+    position:absolute;
+    
+    padding-top:19px;
+    padding-right:17px;
+    z-index:5;
 `;
 
 const Map = styled.div`
   position: absolute;
   height: 100%;
   width: 100%;
+  z-index:0;
+`;
+
+const AdjRight = styled.div`
+    display:flex;
+    justify-content: flex-end;
 `;
 
 interface IProps{
@@ -48,11 +56,13 @@ const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapR
          } }}
         >
 
-        {!loading && <SideBarButton onClick={toggleMenu} xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24">
+        {!loading && 
+        <AdjRight>
+        <SideBarButton onClick={toggleMenu} xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 24 24">
             <path d="M24 6h-24v-4h24v4zm0 4h-24v4h24v-4zm0 8h-24v4h24v-4z"/> 
-        </SideBarButton>}
-      </Sidebar>
+        </SideBarButton></AdjRight>}
       <Map ref={mapRef}/>
+      </Sidebar>
     </Container>
 )};
 
