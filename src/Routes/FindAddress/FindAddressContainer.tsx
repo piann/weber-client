@@ -43,14 +43,14 @@ class FindAddressContainer extends React.Component<IProps, IState>{
         );
     }
 
-    public handleGeoSuccess = (position:Position) => {
+    public handleGeoSuccess:PositionCallback = (position:Position) => {
         const {coords:{latitude, longitude}} = position;
         this.setState({lat:latitude, lng:longitude});
         this.loadMap(latitude, longitude);
         this.reverseGeoCodeAddress(latitude, longitude);
     }
-    public handleGeoError = () => {
-        return;
+    public handleGeoError:PositionErrorCallback = () => {
+        console.log("Error. No Location.")
     }
 
     public loadMap = (lat, lng) => {

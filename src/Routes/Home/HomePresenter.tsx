@@ -14,16 +14,22 @@ const SideBarButton = styled.svg`
     margin-right:20px;
 `;
 
+const Map = styled.div`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+`;
 
 interface IProps{
     isMenuOpen:boolean;
     toggleMenu:()=>void;
     loading:boolean;
+    mapRef:any;
 }
 
 
 
-const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading}) => {
+const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapRef}) => {
     
     return (
     <Container>
@@ -46,6 +52,7 @@ const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading}) => 
             <path d="M24 6h-24v-4h24v4zm0 4h-24v4h24v-4zm0 8h-24v4h24v-4z"/> 
         </SideBarButton>}
       </Sidebar>
+      <Map ref={mapRef}/>
     </Container>
 )};
 
