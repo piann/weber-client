@@ -9,9 +9,6 @@ export const geoCode = async(address:string) => {
     if(status===200 && !data.error_message){
         console.log(data);
         const {results} = data;
-        if(results.length===1){
-            return false;
-        }
         const firstPlace = results[0];
         const {
             formatted_address,
@@ -19,6 +16,9 @@ export const geoCode = async(address:string) => {
                 location:{lat, lng}
             }
         } = firstPlace;
+        if(formatted_address.search("Mountain View")>=0 || formatted_address.search("캘리포니아 마운틴뷰")>=0){
+            return false;
+        }
         return {lat, lng, formatted_address}
     } else {
         toast.error(data.error_message || "Some Unknown Error Happened", {hideProgressBar:true});

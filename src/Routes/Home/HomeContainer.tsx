@@ -6,6 +6,9 @@ import { userProfile } from 'src/types/api';
 import { USER_PROFILE } from 'src/sharedQueries';
 import ReactDOM from "react-dom";
 
+import {geoCode} from "../../mapHelpers";
+import {toast} from "react-toastify";
+
 interface IState{
     isMenuOpen: boolean;
     lat:number;
@@ -27,6 +30,7 @@ class HomeContainer extends React.Component<IProps,IState>{
     public mapRef:any;
     public map:any;
     public userMarker:google.maps.Marker;
+    public toMarker:google.maps.Marker;
     public state ={
         isMenuOpen:false,
         lat:0,
@@ -98,7 +102,6 @@ class HomeContainer extends React.Component<IProps,IState>{
                 lng
             },
             disableDefaultUI:true,
-            minZoom: 8,
             zoom:13
         }
         this.map = new maps.Map(mapNode, mapConfig);
@@ -129,9 +132,41 @@ class HomeContainer extends React.Component<IProps,IState>{
         } as any);
     }
     
-    public onAddressSubmit = () => {
-        return
-    }
+    public onAddressSubmit = async () => {
+        const { toAddress } = this.state;
+        const {google} = this.props;
+        const maps = google.maps;
+        const result = await geoCode(toAddress);
+        if (result !== false) {
+        
+        const { lat:toLat, lng:toLng, formatted_address} = result;
+        this.setState({
+            toAddress:formatted_address,
+            toLat,
+            toLng
+          });
+          if(this.toMarker){
+              this.toMarker.setMap(null);
+          }
+          const toMarkerOptions:google.maps.MarkerOptions = {
+            position:{
+                lat:toLat,
+                lng:toLng
+            },
+        }
+        this.toMarker = new maps.Marker(toMarkerOptions);
+        this.toMarker.setMap(this.map);
+        const bounds = new maps.LatLngBounds();
+        bounds.extend({lat:toLat, lng:toLng});
+        bounds.extend({lat:this.state.lat, lng:this.state.lng});
+        this.map.fitBounds(bounds);
+        console.log(bounds);
+
+        } else {
+            toast.error("Can't get Address. Just move the map",{hideProgressBar:true});
+        }
+        
+      };
 
 
 }
