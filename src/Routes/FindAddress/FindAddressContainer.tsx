@@ -59,7 +59,7 @@ class FindAddressContainer extends React.Component<IProps, IState>{
         const mapNode = ReactDOM.findDOMNode(this.mapRef.current);
         const latlng = new google.maps.LatLng(lat, lng);
         const mapConfig:google.maps.MapOptions = {
-            zoom:15,
+            zoom:13,
             minZoom : 9,
             center:latlng,
             disableDefaultUI:true

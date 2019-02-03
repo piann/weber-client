@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 
 export const geoCode = async(address:string) => {
-    const API_URL = `https://maps.googleapis.com/maps/api/geocode/json?address=${address},+Mountain+View,+CA&key=${MAPS_KEY}`;
+    const API_URL = `https://maps.googleapis.com/maps/api/geocode/json?language=ko&address=${address},+Mountain+View,+CA&key=${MAPS_KEY}`;
     const {status, data} = await axois(API_URL);
     if(status===200 && !data.error_message){
         console.log(data);
@@ -27,7 +27,7 @@ export const geoCode = async(address:string) => {
 };
 
 export const reverseGeoCode = async (lat:number, lng:number) => {
-    const API_URL =  `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${MAPS_KEY}`;
+    const API_URL =  `https://maps.googleapis.com/maps/api/geocode/json?language=ko&latlng=${lat},${lng}&key=${MAPS_KEY}`;
     const {status, data} = await axois(API_URL);
     if(status===200 && !data.error_message){
         const {results} = data;

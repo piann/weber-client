@@ -10,6 +10,9 @@ interface IState{
     isMenuOpen: boolean;
     lat:number;
     lng:number;
+    toAddress:string;
+    toLat:number;
+    toLng:number;
 }
 
 interface IProps extends RouteComponentProps<any>{
@@ -28,13 +31,16 @@ class HomeContainer extends React.Component<IProps,IState>{
         isMenuOpen:false,
         lat:0,
         lng:0,
+        toAddress:"",
+        toLat: 0,
+        toLng: 0,
     }
     constructor(props){
         super(props);
         this.mapRef = React.createRef();
     }
     public componentDidMount(){
-        navigator.geolocation.watchPosition(
+        navigator.geolocation.getCurrentPosition(
             this.handleGeoSuccess,
             this.handleGeoError
         );
@@ -47,7 +53,8 @@ class HomeContainer extends React.Component<IProps,IState>{
             <ProfileQuery query={USER_PROFILE}>
                 {
                     
-                ({loading}) =>(<HomePresenter isMenuOpen={isMenuOpen} toggleMenu={this.toggleMenu} loading={loading} mapRef={this.mapRef}/>)
+                ({loading}) =>(<HomePresenter isMenuOpen={isMenuOpen} toggleMenu={this.toggleMenu} loading={loading} mapRef={this.mapRef}
+                toAddress={this.state.toAddress} onInputChange={this.onInputChange} onAddressSubmit={this.onAddressSubmit} />)
                 }
             </ProfileQuery>        
         )
@@ -73,7 +80,9 @@ class HomeContainer extends React.Component<IProps,IState>{
         console.log("Error. No location.");
     }
     public handleGeoWatchSuccess = (position:Position) => {
-        console.log(position);
+        const {coords:{latitude:lat, longitude:lng}} = position;
+        this.userMarker.setPosition({lat, lng});
+        this.map.panTo({lat, lng});
     }
     public handleGeoWatchError = () =>{
         console.log("Error in tracking position")
@@ -111,7 +120,20 @@ class HomeContainer extends React.Component<IProps,IState>{
         navigator.geolocation.watchPosition(this.handleGeoWatchSuccess, this.handleGeoWatchError, watchOptions);
     } 
 
+    public onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const {
+          target: { name, value }
+        } = event;
+        this.setState({
+          [name]: value
+        } as any);
+    }
     
+    public onAddressSubmit = () => {
+        return
+    }
+
+
 }
 
 export default HomeContainer;

@@ -33,11 +33,14 @@ interface IProps{
     toggleMenu:()=>void;
     loading:boolean;
     mapRef:any;
+    toAddress:string;
+    onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onAddressSubmit:any;
 }
 
 
 
-const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapRef}) => {
+const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapRef, toAddress, onInputChange, onAddressSubmit}) => {
     
     return (
     <Container>
