@@ -2,14 +2,16 @@ import React from "react";
 import HomePresenter from './HomePresenter';
 import { RouteComponentProps } from 'react-router';
 import {Query, MutationFn} from "react-apollo";
-import { userProfile, reportMovement, reportMovementVariables } from 'src/types/api';
+import { userProfile, reportMovement, reportMovementVariables, getDrivers} from 'src/types/api';
 import { USER_PROFILE } from 'src/sharedQueries';
 import ReactDOM from "react-dom";
 
 import {geoCode} from "../../mapHelpers";
 import {toast} from "react-toastify";
 import { graphql } from 'react-apollo'
-import { REPORT_LOCATION } from './HomeQueries';
+import { REPORT_LOCATION, GET_NEARBY_DRIVERS } from './HomeQueries';
+import carIcon from "../../images/car.png";
+
 
 interface IState{
     isMenuOpen: boolean;
@@ -21,6 +23,8 @@ interface IState{
     distance?:string;
     duration?:string;
     price?:string;
+    driverModeOn:boolean;
+    isDriving:boolean;
 }
 
 interface IProps extends RouteComponentProps<any>{
@@ -29,8 +33,12 @@ interface IProps extends RouteComponentProps<any>{
 }
 
 class ProfileQuery extends Query<userProfile>{
+}
+
+class GetNearbyDriverQueries extends Query<getDrivers>{
 
 }
+
 
 class HomeContainer extends React.Component<IProps,IState>{
     public mapRef:any;
@@ -38,6 +46,7 @@ class HomeContainer extends React.Component<IProps,IState>{
     public userMarker:google.maps.Marker;
     public toMarker:google.maps.Marker;
     public directions:google.maps.DirectionsRenderer;
+    public drivers: google.maps.Marker[];
     public state ={
         isMenuOpen:false,
         lat:0,
@@ -48,10 +57,13 @@ class HomeContainer extends React.Component<IProps,IState>{
         distance:"",
         duration:"",
         price:"",
+        isDriving:false,
+        driverModeOn:false,
     }
     constructor(props){
         super(props);
         this.mapRef = React.createRef();
+        this.drivers = [];
     }
     public componentDidMount(){
         navigator.geolocation.getCurrentPosition(
@@ -62,13 +74,28 @@ class HomeContainer extends React.Component<IProps,IState>{
     }
 
     render(){
-        const {isMenuOpen} = this.state;
+        const {isMenuOpen, isDriving, driverModeOn} = this.state;
         return(
-            <ProfileQuery query={USER_PROFILE}>
+            <ProfileQuery query={USER_PROFILE} onCompleted={this.handleProfileQuery}>
                 {
                     
-                ({loading}) =>(<HomePresenter isMenuOpen={isMenuOpen} toggleMenu={this.toggleMenu} loading={loading} mapRef={this.mapRef}
-                toAddress={this.state.toAddress} onInputChange={this.onInputChange} onAddressSubmit={this.onAddressSubmit} price={this.state.price}/>)
+                ({data, loading}) =>(
+                    <GetNearbyDriverQueries
+                    query={GET_NEARBY_DRIVERS}
+                    skip={driverModeOn || isDriving}
+                    pollInterval={5000}
+                    onCompleted={this.handleNearbyDriverQuery}
+                    >
+                        {() => (
+                    <HomePresenter isMenuOpen={isMenuOpen} toggleMenu={this.toggleMenu} loading={loading} mapRef={this.mapRef}
+                    toAddress={this.state.toAddress} onInputChange={this.onInputChange} onAddressSubmit={this.onAddressSubmit} price={this.state.price}/>
+                    )
+
+                    }
+
+                    </GetNearbyDriverQueries>
+                )
+                
                 }
             </ProfileQuery>        
         )
@@ -113,6 +140,10 @@ class HomeContainer extends React.Component<IProps,IState>{
         const{ google} = this.props;
         const maps = google.maps;
         const mapNode = ReactDOM.findDOMNode(this.mapRef.current);
+        if(!mapNode){
+            setTimeout(()=>{this.loadMap(lat,lng)},200);
+            return;
+        }
         const mapConfig:google.maps.MapOptions = {
             center:{
                 lat,
@@ -238,6 +269,57 @@ class HomeContainer extends React.Component<IProps,IState>{
             this.setState({
                 price: distanceNumber
             });
+        }
+      }
+
+      public handleProfileQuery = (data:userProfile) => {
+          const {GetMyProfile} = data;
+          if(GetMyProfile.user){
+              const {isDriving, driverModeOn} = GetMyProfile.user;
+              this.setState({
+                  isDriving,
+                  driverModeOn
+              })
+          } else {
+              console.log("Error on getting user profile")
+          }
+          
+      }
+
+      public handleNearbyDriverQuery = (data: {}|getDrivers) => {
+        if("GetNearbyDrivers" in data){
+            const {
+                GetNearbyDrivers:{
+                    drivers, ok
+                } 
+            } = data;
+            if(drivers && ok){
+                for(const driver of drivers){
+                    if(driver){
+
+                        const markerOptions: google.maps.MarkerOptions = {
+                            position:{
+                                lat:driver.lastLat!,
+                                lng:driver.lastLng!
+                            },
+                            icon:{
+                                path:google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                                scale:5
+                            }
+                            
+                        }
+                        const newMarker: google.maps.Marker = new google.maps.Marker(
+                            markerOptions
+                        );
+                        console.log(google.maps.SymbolPath.BACKWARD_CLOSED_ARROW);
+                        console.log(`${carIcon}`);
+                        newMarker.set("ID", driver.id);
+                        newMarker.setMap(this.map);
+                        this.drivers.push(newMarker);
+
+                    }
+                }
+            }
         }
       }
 

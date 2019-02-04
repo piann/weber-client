@@ -4,7 +4,7 @@ import styled from "../../typed-components";
 import Sidebar from "react-sidebar";
 import Menu from 'src/Components/Menu';
 import SearchBar from "../../Components/SearchBar";
-// import Button from "../../Components/Button";
+import Button from "../../Components/Button";
 
 const Container = styled.div`
 
@@ -24,7 +24,7 @@ const Map = styled.div`
   z-index:0;
 `;
 
-/*
+
 const ButtonExtended = styled(Button)`
   position: absolute;
   bottom: 50px;
@@ -37,7 +37,7 @@ const ButtonExtended = styled(Button)`
   font-size:15px;
   border-radius:15px;
 `;
-*/
+
 const Flex = styled.div`
     width:100vw;
     display:flex;
@@ -97,7 +97,7 @@ const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapR
         </React.Fragment>}
       </Sidebar>
       <Map ref={mapRef}/>
-      {/*{<ButtonExtended onClick={onAddressSubmit} value={"PICK THIS PLACE"} disabled={toAddress===""}/>}*/}
+      {price!=="" && toAddress!==""&& <ButtonExtended value={"REQUEST RIDE"} disabled={toAddress===""}/>}}
     </Container>
 )};
 

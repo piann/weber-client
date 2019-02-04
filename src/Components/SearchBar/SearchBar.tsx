@@ -18,7 +18,7 @@ const Container = styled.div`
 
 const InputInner = styled.input`
 z-index:8;
-width:70vw;
+width:55vw;
 margin-left:22px;
 background: transparent;
 border: none;
