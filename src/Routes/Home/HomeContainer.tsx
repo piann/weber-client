@@ -16,6 +16,9 @@ interface IState{
     toAddress:string;
     toLat:number;
     toLng:number;
+    distance?:string;
+    duration?:string;
+    price?:number;
 }
 
 interface IProps extends RouteComponentProps<any>{
@@ -39,6 +42,9 @@ class HomeContainer extends React.Component<IProps,IState>{
         toAddress:"",
         toLat: 0,
         toLng: 0,
+        distance:"",
+        duration:"",
+        price:undefined,
     }
     constructor(props){
         super(props);
@@ -161,10 +167,10 @@ class HomeContainer extends React.Component<IProps,IState>{
             toAddress:formatted_address,
             toLat,
             toLng
-          } this.createPath);
+          }, this.createPath);
 
         } else {
-            toast.error("Can't get Address. Just move the map",{hideProgressBar:true});
+            toast.error("Can't get Address. Pick from the map",{hideProgressBar:true});
         }
         
       }
@@ -186,25 +192,43 @@ class HomeContainer extends React.Component<IProps,IState>{
           const directionOptions:google.maps.DirectionsRequest = {
               destination: to,
               origin: from,
-              travelMode: google.maps.TravelMode.DRIVING
+              travelMode: google.maps.TravelMode.TRANSIT
           };
+          console.log("direction setting");
           directionService.route(directionOptions, this.handleRoute);
       }
 
-      public handleRoute = (result, status) => {
+      public handleRoute = (
+        result: google.maps.DirectionsResult,
+        status: google.maps.DirectionsStatus
+      ) => {
+          console.log(result, status);
           if(status === google.maps.DirectionsStatus.OK){
             const {routes} = result;
             const {
-                disatnce:{text: disatnce},
+                distance:{text: distance},
                 duration:{text: duration}
             } = routes[0].legs[0];
-            console.log(disatnce, duration);
+            console.log(distance, duration);
             this.directions.setDirections(result);
             this.directions.setMap(this.map);
-
+            this.setState({
+                distance,
+                duration
+            }, this.setPrice)
           } else {
             toast.error("No proper Routes for this destination!",{hideProgressBar:true});
           }
+      }
+
+      public setPrice = () =>{
+        const {distance} = this.state;
+        if(distance !== ""){
+            const distanceNumber = parseFloat(distance.replace(",","."));
+            this.setState({
+                price: distanceNumber
+            });
+        }
       }
 
 
