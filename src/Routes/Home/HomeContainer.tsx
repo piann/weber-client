@@ -1,13 +1,15 @@
 import React from "react";
 import HomePresenter from './HomePresenter';
 import { RouteComponentProps } from 'react-router';
-import {Query} from "react-apollo";
-import { userProfile } from 'src/types/api';
+import {Query, MutationFn} from "react-apollo";
+import { userProfile, reportMovement, reportMovementVariables } from 'src/types/api';
 import { USER_PROFILE } from 'src/sharedQueries';
 import ReactDOM from "react-dom";
 
 import {geoCode} from "../../mapHelpers";
 import {toast} from "react-toastify";
+import { graphql } from 'react-apollo'
+import { REPORT_LOCATION } from './HomeQueries';
 
 interface IState{
     isMenuOpen: boolean;
@@ -18,11 +20,12 @@ interface IState{
     toLng:number;
     distance?:string;
     duration?:string;
-    price?:number;
+    price?:string;
 }
 
 interface IProps extends RouteComponentProps<any>{
     google:any;
+    reportLocation: MutationFn;
 }
 
 class ProfileQuery extends Query<userProfile>{
@@ -44,7 +47,7 @@ class HomeContainer extends React.Component<IProps,IState>{
         toLng: 0,
         distance:"",
         duration:"",
-        price:undefined,
+        price:"",
     }
     constructor(props){
         super(props);
@@ -65,7 +68,7 @@ class HomeContainer extends React.Component<IProps,IState>{
                 {
                     
                 ({loading}) =>(<HomePresenter isMenuOpen={isMenuOpen} toggleMenu={this.toggleMenu} loading={loading} mapRef={this.mapRef}
-                toAddress={this.state.toAddress} onInputChange={this.onInputChange} onAddressSubmit={this.onAddressSubmit} />)
+                toAddress={this.state.toAddress} onInputChange={this.onInputChange} onAddressSubmit={this.onAddressSubmit} price={this.state.price}/>)
                 }
             </ProfileQuery>        
         )
@@ -91,9 +94,16 @@ class HomeContainer extends React.Component<IProps,IState>{
         console.log("Error. No location.");
     }
     public handleGeoWatchSuccess = (position:Position) => {
+        const {reportLocation} = this.props;
         const {coords:{latitude:lat, longitude:lng}} = position;
         this.userMarker.setPosition({lat, lng});
         this.map.panTo({lat, lng});
+        reportLocation({
+            variables:{
+                lat,
+                lng
+            }
+        })
     }
     public handleGeoWatchError = () =>{
         console.log("Error in tracking position")
@@ -224,7 +234,7 @@ class HomeContainer extends React.Component<IProps,IState>{
       public setPrice = () =>{
         const {distance} = this.state;
         if(distance !== ""){
-            const distanceNumber = parseFloat(distance.replace(",","."));
+            const distanceNumber = Number(parseFloat(distance.replace(",","."))).toFixed(2);
             this.setState({
                 price: distanceNumber
             });
@@ -234,4 +244,6 @@ class HomeContainer extends React.Component<IProps,IState>{
 
 }
 
-export default HomeContainer;
+export default graphql<any,reportMovement, reportMovementVariables>(REPORT_LOCATION, {
+    name:"reportLocation"
+})(HomeContainer);

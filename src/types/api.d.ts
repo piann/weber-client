@@ -112,6 +112,28 @@ export interface editAccountVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: reportMovement
+// ====================================================
+
+export interface reportMovement_ReportMovement {
+  __typename: "ReportMovementResponse";
+  ok: boolean;
+  error: string | null;
+}
+
+export interface reportMovement {
+  ReportMovement: reportMovement_ReportMovement;
+}
+
+export interface reportMovementVariables {
+  lat: number;
+  lng: number;
+}
+
+/* tslint:disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: startPhoneVerification
 // ====================================================
 

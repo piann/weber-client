@@ -54,11 +54,12 @@ interface IProps{
     toAddress:string;
     onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onAddressSubmit:any;
+    price:string;
 }
 
 
 
-const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapRef, toAddress, onInputChange, onAddressSubmit}) => {
+const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapRef, toAddress, onInputChange, onAddressSubmit, price}) => {
     return (
     <Container>
         <Helmet>
