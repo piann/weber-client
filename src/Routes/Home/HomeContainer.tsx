@@ -31,6 +31,7 @@ class HomeContainer extends React.Component<IProps,IState>{
     public map:any;
     public userMarker:google.maps.Marker;
     public toMarker:google.maps.Marker;
+    public directions:google.maps.DirectionsRenderer;
     public state ={
         isMenuOpen:false,
         lat:0,
@@ -140,11 +141,7 @@ class HomeContainer extends React.Component<IProps,IState>{
         if (result !== false) {
         
         const { lat:toLat, lng:toLng, formatted_address} = result;
-        this.setState({
-            toAddress:formatted_address,
-            toLat,
-            toLng
-          });
+        
           if(this.toMarker){
               this.toMarker.setMap(null);
           }
@@ -160,13 +157,55 @@ class HomeContainer extends React.Component<IProps,IState>{
         bounds.extend({lat:toLat, lng:toLng});
         bounds.extend({lat:this.state.lat, lng:this.state.lng});
         this.map.fitBounds(bounds);
-        console.log(bounds);
+        this.setState({
+            toAddress:formatted_address,
+            toLat,
+            toLng
+          } this.createPath);
 
         } else {
             toast.error("Can't get Address. Just move the map",{hideProgressBar:true});
         }
         
-      };
+      }
+      public createPath = () => {
+          const {toLat, toLng, lat, lng} = this.state;
+          if(this.directions){
+              this.directions.setMap(null);
+          }
+          const renderOptions:google.maps.DirectionsRendererOptions = {
+              suppressMarkers:true,
+              polylineOptions:{
+                  strokeColor:"#000"
+              }
+          }
+          this.directions = new google.maps.DirectionsRenderer(renderOptions);
+          const to = new google.maps.LatLng(toLat, toLng);
+          const from = new google.maps.LatLng(lat, lng);
+          const directionService:google.maps.DirectionsService = new google.maps.DirectionsService();
+          const directionOptions:google.maps.DirectionsRequest = {
+              destination: to,
+              origin: from,
+              travelMode: google.maps.TravelMode.DRIVING
+          };
+          directionService.route(directionOptions, this.handleRoute);
+      }
+
+      public handleRoute = (result, status) => {
+          if(status === google.maps.DirectionsStatus.OK){
+            const {routes} = result;
+            const {
+                disatnce:{text: disatnce},
+                duration:{text: duration}
+            } = routes[0].legs[0];
+            console.log(disatnce, duration);
+            this.directions.setDirections(result);
+            this.directions.setMap(this.map);
+
+          } else {
+            toast.error("No proper Routes for this destination!",{hideProgressBar:true});
+          }
+      }
 
 
 }
