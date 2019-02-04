@@ -5,6 +5,7 @@ import Sidebar from "react-sidebar";
 import Menu from 'src/Components/Menu';
 import SearchBar from "../../Components/SearchBar";
 import Button from "../../Components/Button";
+import { userProfile } from 'src/types/api';
 
 const Container = styled.div`
 
@@ -13,7 +14,7 @@ const Container = styled.div`
 const SideBarButton = styled.svg`
     justify-self:flex-end;
     z-index:5;
-    padding-top:21px;
+    padding-top:22px;
     padding-right:18px;
 `;
 
@@ -22,6 +23,10 @@ const Map = styled.div`
   height: 100%;
   width: 100%;
   z-index:0;
+`;
+
+const Blank = styled.div`
+    width:75vw;
 `;
 
 
@@ -55,11 +60,12 @@ interface IProps{
     onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onAddressSubmit:any;
     price:string;
+    userData?:userProfile;
 }
 
 
 
-const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapRef, toAddress, onInputChange, onAddressSubmit, price}) => {
+const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapRef, toAddress, onInputChange, onAddressSubmit, price, userData}) => {
     return (
     <Container>
         <Helmet>
@@ -78,9 +84,10 @@ const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapR
          } }}
         >
 
-        {!loading &&
+        
         <React.Fragment>
         <Flex>
+        {!loading && !userData!.GetMyProfile!.user!.isDriving && !userData!.GetMyProfile!.user!.driverModeOn &&
             <SearchBar
             placeholder={"Where to go?"}
             value={toAddress}
@@ -88,13 +95,15 @@ const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapR
             onChange={onInputChange}
             onClick={onAddressSubmit}
             onBlur={()=>null}
-        />
-        
+        />}
+        {!loading && userData!.GetMyProfile!.user!.driverModeOn &&
+            <Blank/>
+        }
         <SideBarButton onClick={toggleMenu} xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 24 24">
             <path d="M24 6h-24v-4h24v4zm0 4h-24v4h24v-4zm0 8h-24v4h24v-4z"/> 
         </SideBarButton>
         </Flex>
-        </React.Fragment>}
+        </React.Fragment>
       </Sidebar>
       <Map ref={mapRef}/>
       {price!=="" && toAddress!==""&& <ButtonExtended value={"REQUEST RIDE"} disabled={toAddress===""}/>}}
