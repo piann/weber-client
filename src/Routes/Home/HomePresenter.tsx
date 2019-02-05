@@ -99,14 +99,14 @@ const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapR
         {!loading && userData!.GetMyProfile!.user!.driverModeOn &&
             <Blank/>
         }
-        <SideBarButton onClick={toggleMenu} xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 24 24">
+        {!loading && <SideBarButton onClick={toggleMenu} xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 24 24">
             <path d="M24 6h-24v-4h24v4zm0 4h-24v4h24v-4zm0 8h-24v4h24v-4z"/> 
-        </SideBarButton>
+        </SideBarButton>}
         </Flex>
         </React.Fragment>
       </Sidebar>
       <Map ref={mapRef}/>
-      {price!=="" && toAddress!==""&& <ButtonExtended value={"REQUEST RIDE"} disabled={toAddress===""}/>}}
+      {price!=="" && toAddress!==""&& <ButtonExtended value={"REQUEST RIDE"} disabled={toAddress===""}/>}
     </Container>
 )};
 

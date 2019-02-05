@@ -46,6 +46,7 @@ class VerifyPhoneContainer extends React.Component<IProps, IState>{
     public render(){
         
         const {verificationCode, phoneNumber} = this.state;
+        const {history} = this.props;
         return (
         <Mutation mutation={LOG_USER_IN}>
             {(logUserIn) => (
@@ -60,6 +61,7 @@ class VerifyPhoneContainer extends React.Component<IProps, IState>{
                             logUserIn({variables:{
                                 token:CompletePhoneVerification.token
                             }});
+
                         }
                         this.setState({processing:true});
                         toast.success("Success! Now you are logged in...", {autoClose:1300, className: css({
@@ -67,7 +69,9 @@ class VerifyPhoneContainer extends React.Component<IProps, IState>{
                             color:"#a1887f",
                             fontSize:14
                         })} )
-                        
+                        history.push({
+                            pathname: "/",
+                        });
                     } else {
                         toast.error(CompletePhoneVerification.error, {hideProgressBar:true, className: css({
                             background: "#efeff2 !important",

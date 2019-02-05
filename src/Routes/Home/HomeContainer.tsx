@@ -6,7 +6,7 @@ import { userProfile, reportMovement, reportMovementVariables, getDrivers} from 
 import { USER_PROFILE } from 'src/sharedQueries';
 import ReactDOM from "react-dom";
 
-import {geoCode} from "../../mapHelpers";
+import {geoCode, reverseGeoCode} from "../../mapHelpers";
 import {toast} from "react-toastify";
 import { graphql } from 'react-apollo'
 import { REPORT_LOCATION, GET_NEARBY_DRIVERS } from './HomeQueries';
@@ -150,9 +150,11 @@ class HomeContainer extends React.Component<IProps,IState>{
                 lng
             },
             disableDefaultUI:true,
+            disableDoubleClickZoom: true,
             zoom:13
         }
         this.map = new maps.Map(mapNode, mapConfig);
+       
         const userMarkerOptions:google.maps.MarkerOptions = {
             position:{
                 lat,
@@ -160,7 +162,7 @@ class HomeContainer extends React.Component<IProps,IState>{
             },
             icon:{
                 path:maps.SymbolPath.CIRCLE,
-                scale:6
+                scale:5
             }
         }
         this.userMarker = new maps.Marker(userMarkerOptions);
@@ -169,6 +171,13 @@ class HomeContainer extends React.Component<IProps,IState>{
             enableHighAccuracy:true
         }
         navigator.geolocation.watchPosition(this.handleGeoWatchSuccess, this.handleGeoWatchError, watchOptions);
+
+        maps.event.addListener(this.map, "dblclick", (e)=> 
+        {   
+            console.log("addListener - DOUBLE Click Pressesed"); 
+            this.setMarkerByClick(e);
+        });    
+
     } 
 
     public onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -179,7 +188,46 @@ class HomeContainer extends React.Component<IProps,IState>{
           [name]: value
         } as any);
     }
-    
+    public reverseGeoCodeAddress = async (lat:number, lng:number) => {
+        const toAddress = await reverseGeoCode(lat,lng);
+        if(toAddress !==false){
+            this.setState({
+                toAddress
+            })
+        }
+    }
+
+    public setMarkerByClick = async (e) => {
+        const lat = e.latLng.lat();
+        const lng = e.latLng.lng();
+        await this.setMarkerByLatLng(lat,lng);
+
+    }
+
+    public setMarkerByLatLng = async (lat, lng) => {
+        if(this.toMarker){
+            this.toMarker.setMap(null);
+        }
+        const toMarkerOptions:google.maps.MarkerOptions = {
+            position:{
+                lat,
+                lng
+            },
+        }
+        this.toMarker = new google.maps.Marker(toMarkerOptions);
+        this.toMarker.setMap(this.map);
+        const bounds = new google.maps.LatLngBounds();
+        bounds.extend({lat, lng});
+        bounds.extend({lat:this.state.lat, lng:this.state.lng});
+        this.map.fitBounds(bounds);
+        this.setState({
+            toLat:lat,
+            toLng:lng
+          }, this.createPath);
+        await this.reverseGeoCodeAddress(lat,lng);
+
+    }
+
     public onAddressSubmit = async () => {
         const { toAddress } = this.state;
         const {google} = this.props;
@@ -211,7 +259,7 @@ class HomeContainer extends React.Component<IProps,IState>{
           }, this.createPath);
 
         } else {
-            toast.error("Can't get Address. Pick from the map",{hideProgressBar:true});
+            toast.error("Can't get Address. Pick from the map by double-click",{hideProgressBar:true});
         }
         
       }
