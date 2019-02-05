@@ -343,8 +343,23 @@ class HomeContainer extends React.Component<IProps,IState>{
             } = data;
             if(drivers && ok){
                 for(const driver of drivers){
-                    if(driver){
+                    if(driver && driver.lastLat && driver.lastLng){
+                        const existingDriver:
+                        |google.maps.Marker 
+                        |undefined = this.drivers.find(
+                            (driverMarker:google.maps.Marker) => {
+                                const markerId = driverMarker.get("ID");
+                                return markerId === driver.id;
+                            }
+                        );
 
+                        if(existingDriver){
+                            existingDriver.setPosition({
+                                lat:driver.lastLat,
+                                lng:driver.lastLng
+                            });
+                          existingDriver.setMap(this.map);
+                        } else {
                         const markerOptions: google.maps.MarkerOptions = {
                             position:{
                                 lat:driver.lastLat!,
@@ -359,12 +374,11 @@ class HomeContainer extends React.Component<IProps,IState>{
                         const newMarker: google.maps.Marker = new google.maps.Marker(
                             markerOptions
                         );
-                        console.log(google.maps.SymbolPath.BACKWARD_CLOSED_ARROW);
                         console.log(`${carIcon}`);
                         newMarker.set("ID", driver.id);
                         newMarker.setMap(this.map);
                         this.drivers.push(newMarker);
-
+                        }
                     }
                 }
             }
