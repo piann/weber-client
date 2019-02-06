@@ -13,13 +13,7 @@ const Map = styled.div`
   z-index: 1;
 `;
 
-const AddressBarEx = styled(AddressBar)`
-  position: absolute;
-  top: 10px;
-  left: 0;
-  right: 0;
-  margin:auto;
-`;
+
 
 const Center = styled.div`
     position:absolute;
@@ -72,7 +66,7 @@ class FindAddressPresenter extends React.Component<IProps>{
             <Helmet>
                 <title>Find Location | Weber</title>
             </Helmet>
-            <AddressBarEx
+            <AddressBar
             value={address}
             name={"address"}
             onChange={onInputChange}

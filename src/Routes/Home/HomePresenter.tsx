@@ -6,6 +6,7 @@ import Menu from 'src/Components/Menu';
 import SearchBar from "../../Components/SearchBar";
 import Button from "../../Components/Button";
 import { userProfile } from 'src/types/api';
+import {MutationFn} from "react-apollo";
 
 const Container = styled.div`
 
@@ -38,8 +39,8 @@ const ButtonExtended = styled(Button)`
   margin: auto;
   z-index: 5;
   height: auto;
-  width: 210px;
-  font-size:15px;
+  width: 215px;
+  font-size:14px;
   border-radius:15px;
 `;
 
@@ -61,11 +62,12 @@ interface IProps{
     onAddressSubmit:any;
     price:string;
     userData?:userProfile;
+    requestRideFn:MutationFn;
 }
 
 
 
-const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapRef, toAddress, onInputChange, onAddressSubmit, price, userData}) => {
+const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapRef, toAddress, onInputChange, onAddressSubmit, price, userData, requestRideFn}) => {
     return (
     <Container>
         <Helmet>
@@ -106,7 +108,7 @@ const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapR
         </React.Fragment>
       </Sidebar>
       <Map ref={mapRef}/>
-      {price!=="" && toAddress!==""&& <ButtonExtended value={"REQUEST RIDE"} disabled={toAddress===""}/>}
+      {price!=="" && toAddress!==""&& <ButtonExtended onClick={requestRideFn} value={`REQUEST RIDE : $${price}`} disabled={toAddress===""}/>}
     </Container>
 )};
 

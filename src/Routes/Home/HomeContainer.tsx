@@ -1,20 +1,21 @@
 import React from "react";
 import HomePresenter from './HomePresenter';
 import { RouteComponentProps } from 'react-router';
-import {Query, MutationFn} from "react-apollo";
-import { userProfile, reportMovement, reportMovementVariables, getDrivers} from 'src/types/api';
+import {Query, Mutation, MutationFn} from "react-apollo";
+import { userProfile, reportMovement, reportMovementVariables, getDrivers, requestRide, requestRideVariables} from 'src/types/api';
 import { USER_PROFILE } from 'src/sharedQueries';
 import ReactDOM from "react-dom";
 
 import {geoCode, reverseGeoCode} from "../../mapHelpers";
 import {toast} from "react-toastify";
 import { graphql } from 'react-apollo'
-import { REPORT_LOCATION, GET_NEARBY_DRIVERS } from './HomeQueries';
+import { REPORT_LOCATION, GET_NEARBY_DRIVERS, REQUEST_RIDE } from './HomeQueries';
 import carIcon from "../../images/car.png";
 
 
 interface IState{
     isMenuOpen: boolean;
+    fromAddress:string;
     lat:number;
     lng:number;
     toAddress:string;
@@ -39,6 +40,10 @@ class GetNearbyDriverQueries extends Query<getDrivers>{
 
 }
 
+class RequestRideMutation extends Mutation<requestRide, requestRideVariables>{
+
+}
+
 
 class HomeContainer extends React.Component<IProps,IState>{
     public mapRef:any;
@@ -49,6 +54,7 @@ class HomeContainer extends React.Component<IProps,IState>{
     public drivers: google.maps.Marker[];
     public state ={
         isMenuOpen:false,
+        fromAddress:"",
         lat:0,
         lng:0,
         toAddress:"",
@@ -74,7 +80,7 @@ class HomeContainer extends React.Component<IProps,IState>{
     }
 
     render(){
-        const {isMenuOpen, isDriving, driverModeOn} = this.state;
+        const {isMenuOpen, isDriving, driverModeOn, price, duration, distance, fromAddress, toLat, toLng, toAddress, lat, lng} = this.state;
         return(
             <ProfileQuery query={USER_PROFILE} onCompleted={this.handleProfileQuery}>
                 {
@@ -87,8 +93,11 @@ class HomeContainer extends React.Component<IProps,IState>{
                     onCompleted={this.handleNearbyDriverQuery}
                     >
                         {() => (
-                    <HomePresenter isMenuOpen={isMenuOpen} toggleMenu={this.toggleMenu} loading={loading} mapRef={this.mapRef}
-                    toAddress={this.state.toAddress} onInputChange={this.onInputChange} onAddressSubmit={this.onAddressSubmit} price={this.state.price} userData={data}/>
+                    <RequestRideMutation mutation={REQUEST_RIDE} 
+                    variables={{price:parseFloat(price), duration, distance, pickUpAddress:fromAddress, pickUpLat:lat, pickUpLng:lng, dropOffAddress: toAddress, dropOffLat: toLat, dropOffLng: toLng, }} >
+                        {(requestRideFn) => (<HomePresenter isMenuOpen={isMenuOpen} toggleMenu={this.toggleMenu} loading={loading} mapRef={this.mapRef}
+                    toAddress={this.state.toAddress} onInputChange={this.onInputChange} onAddressSubmit={this.onAddressSubmit} price={this.state.price} userData={data} requestRideFn={requestRideFn}/>)}
+                    </RequestRideMutation>
                     )
 
                     }
@@ -120,7 +129,7 @@ class HomeContainer extends React.Component<IProps,IState>{
     public handleGeoError = () =>{
         console.log("Error. No location.");
     }
-    public handleGeoWatchSuccess = (position:Position) => {
+    public handleGeoWatchSuccess = async (position:Position) => {
         const {reportLocation} = this.props;
         const {coords:{latitude:lat, longitude:lng}} = position;
         this.userMarker.setPosition({lat, lng});
@@ -130,7 +139,13 @@ class HomeContainer extends React.Component<IProps,IState>{
                 lat,
                 lng
             }
-        })
+        });
+        const fromAddress = await this.getAddressFromLatLng(lat, lng);
+        if(fromAddress !== false){
+            this.setState({
+                fromAddress
+            });
+        }
     }
     public handleGeoWatchError = () =>{
         console.log("Error in tracking position")
@@ -188,13 +203,11 @@ class HomeContainer extends React.Component<IProps,IState>{
           [name]: value
         } as any);
     }
-    public reverseGeoCodeAddress = async (lat:number, lng:number) => {
-        const toAddress = await reverseGeoCode(lat,lng);
-        if(toAddress !==false){
-            this.setState({
-                toAddress
-            })
-        }
+
+
+    public getAddressFromLatLng = async (lat:number, lng:number) => {
+        const address = await reverseGeoCode(lat,lng);
+        return address;
     }
 
     public setMarkerByClick = async (e) => {
@@ -224,7 +237,12 @@ class HomeContainer extends React.Component<IProps,IState>{
             toLat:lat,
             toLng:lng
           }, this.createPath);
-        await this.reverseGeoCodeAddress(lat,lng);
+        const toAddress = await this.getAddressFromLatLng(lat,lng);
+        if(toAddress !== false){
+            this.setState({
+                toAddress
+            });
+        }
 
     }
 
