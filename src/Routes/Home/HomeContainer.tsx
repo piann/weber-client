@@ -9,9 +9,9 @@ import ReactDOM from "react-dom";
 import {geoCode, reverseGeoCode} from "../../mapHelpers";
 import {toast} from "react-toastify";
 import { graphql } from 'react-apollo'
-import { REPORT_LOCATION, GET_NEARBY_DRIVERS, REQUEST_RIDE } from './HomeQueries';
+import { REPORT_LOCATION, GET_NEARBY_DRIVERS, REQUEST_RIDE, GET_NEARBY_RIDE } from './HomeQueries';
 import carIcon from "../../images/car.png";
-
+import {css} from "glamor";
 
 interface IState{
     isMenuOpen: boolean;
@@ -43,6 +43,8 @@ class GetNearbyDriverQueries extends Query<getDrivers>{
 class RequestRideMutation extends Mutation<requestRide, requestRideVariables>{
 
 }
+
+class GetNearbyRides extends Query<getDrivers>{}
 
 
 class HomeContainer extends React.Component<IProps,IState>{
@@ -94,9 +96,15 @@ class HomeContainer extends React.Component<IProps,IState>{
                     >
                         {() => (
                     <RequestRideMutation mutation={REQUEST_RIDE} 
-                    variables={{price:parseFloat(price), duration, distance, pickUpAddress:fromAddress, pickUpLat:lat, pickUpLng:lng, dropOffAddress: toAddress, dropOffLat: toLat, dropOffLng: toLng, }} >
-                        {(requestRideFn) => (<HomePresenter isMenuOpen={isMenuOpen} toggleMenu={this.toggleMenu} loading={loading} mapRef={this.mapRef}
-                    toAddress={this.state.toAddress} onInputChange={this.onInputChange} onAddressSubmit={this.onAddressSubmit} price={this.state.price} userData={data} requestRideFn={requestRideFn}/>)}
+                    variables={{price:parseFloat(price), duration, distance, pickUpAddress:fromAddress, pickUpLat:lat, pickUpLng:lng, dropOffAddress: toAddress, dropOffLat: toLat, dropOffLng: toLng, }}
+                    onCompleted={this.handleRideRequest}
+                    >
+                        {(requestRideFn) => (
+                        <GetNearbyRides query={GET_NEARBY_RIDE} skip={!isDriving}>
+                            {({data:nearbyRideData})=>(<HomePresenter isMenuOpen={isMenuOpen} toggleMenu={this.toggleMenu} loading={loading} mapRef={this.mapRef}
+                    toAddress={this.state.toAddress} onInputChange={this.onInputChange} onAddressSubmit={this.onAddressSubmit} price={this.state.price} userData={data} requestRideFn={requestRideFn} nearbyRide={nearbyRideData}/>)}
+                        </GetNearbyRides>   
+                        )}
                     </RequestRideMutation>
                     )
 
@@ -189,8 +197,9 @@ class HomeContainer extends React.Component<IProps,IState>{
 
         maps.event.addListener(this.map, "dblclick", (e)=> 
         {   
-            console.log("addListener - DOUBLE Click Pressesed"); 
-            this.setMarkerByClick(e);
+            if(!this.state.driverModeOn){
+                this.setMarkerByClick(e);
+            }
         });    
 
     } 
@@ -352,6 +361,18 @@ class HomeContainer extends React.Component<IProps,IState>{
           
       }
 
+      public handleRideRequest = (reqRideData:requestRide) => {
+        const {RequestRide} = reqRideData;
+        if(RequestRide.ok){
+            toast.success(`Drive requested, finding a driver`,{hideProgressBar:true, className: css({
+                background: "#efeff2 !important",
+                color:"#a1887f",
+                fontSize:14
+            })});
+        } else {
+            toast.error(RequestRide.error,{hideProgressBar:true});
+        }
+      }
       public handleNearbyDriverQuery = (data: {}|getDrivers) => {
         if("GetNearbyDrivers" in data){
             const {

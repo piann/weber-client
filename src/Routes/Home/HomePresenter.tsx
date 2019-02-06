@@ -62,12 +62,13 @@ interface IProps{
     onAddressSubmit:any;
     price:string;
     userData?:userProfile;
-    requestRideFn:MutationFn;
+    requestRideFn?:MutationFn;
+    nearbyRide?:any
 }
 
 
 
-const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapRef, toAddress, onInputChange, onAddressSubmit, price, userData, requestRideFn}) => {
+const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapRef, toAddress, onInputChange, onAddressSubmit, price, userData, requestRideFn, nearbyRide}) => {
     return (
     <Container>
         <Helmet>
