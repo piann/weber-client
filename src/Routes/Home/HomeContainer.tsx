@@ -5,11 +5,11 @@ import {Query, Mutation, MutationFn} from "react-apollo";
 import { userProfile, reportMovement, reportMovementVariables, getDrivers, requestRide, requestRideVariables, accpetRide, accpetRideVariables} from 'src/types/api';
 import { USER_PROFILE } from 'src/sharedQueries';
 import ReactDOM from "react-dom";
-
+import {SubscribeToMoreOptions} from "apollo-client";
 import {geoCode, reverseGeoCode} from "../../mapHelpers";
 import {toast} from "react-toastify";
 import { graphql } from 'react-apollo'
-import { REPORT_LOCATION, GET_NEARBY_DRIVERS, REQUEST_RIDE, GET_NEARBY_RIDE, ACCEPT_RIDE } from './HomeQueries';
+import { REPORT_LOCATION, GET_NEARBY_DRIVERS, REQUEST_RIDE, GET_NEARBY_RIDE, ACCEPT_RIDE, SUBSCRIBE_NEARBY_RIDES } from './HomeQueries';
 import carIcon from "../../images/car.png";
 import {css} from "glamor";
 
@@ -104,15 +104,38 @@ class HomeContainer extends React.Component<IProps,IState>{
                     >
                         {(requestRideFn) => (
                         <GetNearbyRides query={GET_NEARBY_RIDE} skip={!isDriving}>
-                            {({data:nearbyRideData})=>(
-                                <AcceptRideMutation mutation={ACCEPT_RIDE}>
-                                {(acceptRideFn)=>(
-                                <HomePresenter isMenuOpen={isMenuOpen} toggleMenu={this.toggleMenu} loading={loading} mapRef={this.mapRef}
-                                toAddress={this.state.toAddress} onInputChange={this.onInputChange} onAddressSubmit={this.onAddressSubmit} price={this.state.price} userData={data} requestRideFn={requestRideFn} nearbyRide={nearbyRideData} acceptRideFn={acceptRideFn}/>
-                                )
+                            {({subscribeToMore, data:nearbyRideData})=>{
+                                const rideSubscriptionOption:SubscribeToMoreOptions = {
+                                    document:SUBSCRIBE_NEARBY_RIDES,
+                                    updateQuery: (prev, {subscriptionData}) => {
+                                        if(!subscriptionData){
+                                            return prev;
+                                        }
+                                        
+                                        const newObject = Object.assign({}, prev, {
+                                            GetNearbyRide: {
+                                              ...prev.GetNearbyRide,
+                                              ride: subscriptionData.data.NearbyRideSubscription
+                                            }
+                                        });
+                                        console.log(newObject);
+                                        return newObject;
+                                        
+                                    }
+                                };
+                                if(isDriving){
+                                    subscribeToMore(rideSubscriptionOption);
                                 }
-                                </AcceptRideMutation>
-                            )}
+                                return (
+                                    <AcceptRideMutation mutation={ACCEPT_RIDE}>
+                                    {(acceptRideFn)=>(
+                                    <HomePresenter isMenuOpen={isMenuOpen} toggleMenu={this.toggleMenu} loading={loading} mapRef={this.mapRef}
+                                    toAddress={this.state.toAddress} onInputChange={this.onInputChange} onAddressSubmit={this.onAddressSubmit} price={this.state.price} userData={data} requestRideFn={requestRideFn} nearbyRide={nearbyRideData} acceptRideFn={acceptRideFn}/>
+                                    )
+                                    }
+                                    </AcceptRideMutation>
+                                )
+                            }}
                         </GetNearbyRides>   
                         )}
                     </RequestRideMutation>
@@ -141,6 +164,7 @@ class HomeContainer extends React.Component<IProps,IState>{
             lat,
             lng
         });
+        console.log(lat, lng);
         this.loadMap(lat, lng);
 
     }
@@ -151,7 +175,7 @@ class HomeContainer extends React.Component<IProps,IState>{
         const {reportLocation} = this.props;
         const {coords:{latitude:lat, longitude:lng}} = position;
         this.userMarker.setPosition({lat, lng});
-        this.map.panTo({lat, lng});
+        // this.map.panTo({lat, lng});
         reportLocation({
             variables:{
                 lat,
@@ -346,7 +370,9 @@ class HomeContainer extends React.Component<IProps,IState>{
             toast.error("No proper Routes for this destination!",{hideProgressBar:true});
           }
       }
-
+      public handleSubscriptionUpdate = (data) => {
+        console.log(data);
+      }
       public setPrice = () =>{
         const {distance} = this.state;
         if(distance !== ""){
