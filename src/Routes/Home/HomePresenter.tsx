@@ -5,6 +5,7 @@ import Sidebar from "react-sidebar";
 import Menu from 'src/Components/Menu';
 import SearchBar from "../../Components/SearchBar";
 import Button from "../../Components/Button";
+import RidePopUp from "../../Components/RidePopUp";
 import { userProfile } from 'src/types/api';
 import {MutationFn} from "react-apollo";
 
@@ -63,12 +64,15 @@ interface IProps{
     price:string;
     userData?:userProfile;
     requestRideFn?:MutationFn;
+    acceptRideFn?:MutationFn;
     nearbyRide?:any
 }
 
 
 
-const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapRef, toAddress, onInputChange, onAddressSubmit, price, userData, requestRideFn, nearbyRide}) => {
+const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapRef, toAddress, onInputChange, onAddressSubmit, price, userData, requestRideFn,
+    nearbyRide:{GetNearbyRide:{ride=null}={}}={},
+    acceptRideFn }) => {
     return (
     <Container>
         <Helmet>
@@ -110,6 +114,18 @@ const HomePresenter: React.SFC<IProps> = ({isMenuOpen, toggleMenu, loading, mapR
       </Sidebar>
       <Map ref={mapRef}/>
       {price!=="" && toAddress!==""&& <ButtonExtended onClick={requestRideFn} value={`REQUEST RIDE : $${price}`} disabled={toAddress===""}/>}
+      {ride && userData!.GetMyProfile!.user!.driverModeOn &&
+      <RidePopUp
+      id={ride.id}
+      pickUpAddress={ride.pickUpAddress}
+      dropOffAddress={ride.dropOffAddress}
+      price={ride.price}
+      distance={ride.distance}
+      passengerName={ride.passenger.fullName!}
+      passengerPhoto={ride.passenger.profilePhoto!}
+      acceptRideFn={acceptRideFn}
+    />
+      }
     </Container>
 )};
 
