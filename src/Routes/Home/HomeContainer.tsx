@@ -127,7 +127,7 @@ class HomeContainer extends React.Component<IProps,IState>{
                                     subscribeToMore(rideSubscriptionOption);
                                 }
                                 return (
-                                    <AcceptRideMutation mutation={ACCEPT_RIDE}>
+                                    <AcceptRideMutation mutation={ACCEPT_RIDE} onCompleted={this.handleRideAcceptance}>
                                     {(acceptRideFn)=>(
                                     <HomePresenter isMenuOpen={isMenuOpen} toggleMenu={this.toggleMenu} loading={loading} mapRef={this.mapRef}
                                     toAddress={this.state.toAddress} onInputChange={this.onInputChange} onAddressSubmit={this.onAddressSubmit} price={this.state.price} userData={data} requestRideFn={requestRideFn} nearbyRide={nearbyRideData} acceptRideFn={acceptRideFn}/>
@@ -398,6 +398,7 @@ class HomeContainer extends React.Component<IProps,IState>{
       }
 
       public handleRideRequest = (reqRideData:requestRide) => {
+        const {history} = this.props;
         const {RequestRide} = reqRideData;
         if(RequestRide.ok){
             toast.success(`Drive requested, finding a driver`,{hideProgressBar:true, className: css({
@@ -405,9 +406,19 @@ class HomeContainer extends React.Component<IProps,IState>{
                 color:"#a1887f",
                 fontSize:14
             })});
+            history.push(`/ride/${RequestRide.ride!.id}`)
         } else {
             toast.error(RequestRide.error,{hideProgressBar:true});
         }
+      }
+
+      public handleRideAcceptance = (data: accpetRide) => {
+          const {UpdateRideStatus} = data; 
+          const {history} = this.props;
+          if(UpdateRideStatus.ok){
+              history.push(`/ride/${UpdateRideStatus.rideId}`);
+          }
+
       }
       public handleNearbyDriverQuery = (data: {}|getDrivers) => {
         if("GetNearbyDrivers" in data){
