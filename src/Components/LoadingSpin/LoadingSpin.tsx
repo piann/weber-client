@@ -2,10 +2,11 @@ import styled from "../../typed-components";
 import React from "react";
 
 const Spin = styled.div`
+    margin:auto;
     margin-top:30px;
     margin-bottom: 10px;
-    margin-right:50px;
-    margin-left:50px;
+    right:0;
+    left:0;
     font-size:25px;
 `;
 

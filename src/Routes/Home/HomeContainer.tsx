@@ -402,7 +402,7 @@ class HomeContainer extends React.Component<IProps,IState>{
         const {RequestRide} = reqRideData;
         if(RequestRide.ok){
             toast.success(`Drive requested, finding a driver`,{hideProgressBar:true, className: css({
-                background: "#efeff2 !important",
+                background: "#bcdefa !important",
                 color:"#a1887f",
                 fontSize:14
             })});

@@ -4,15 +4,16 @@ import { Link } from "react-router-dom";
 import Button from "../../Components/Button";
 import styled from "../../typed-components";
 import { getRide, userProfile } from "../../types/api";
+import LoadingSpin from 'src/Components/LoadingSpin';
 
 const Container = styled.div`
   padding: 40px;
 `;
 
-const Title = styled.h4`
+const Title = styled.h5`
   font-weight: 800;
-  margin-top: 30px;
-  margin-bottom: 10px;
+  margin-top: 15px;
+  margin-bottom: 7px;
   &:first-child {
     margin-top: 0;
   }
@@ -20,11 +21,12 @@ const Title = styled.h4`
 
 const Data = styled.span`
   color: ${props => props.theme.blueColor};
+  font-size:13px;
 `;
 
 const Img = styled.img`
   border-radius: 50%;
-  margin-right: 20px;
+  margin-right: 15px;
   max-width: 50px;
   height: 50px;
 `;
@@ -32,7 +34,8 @@ const Img = styled.img`
 const Passenger = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  font-size:13px;
 `;
 
 const Buttons = styled.div`
@@ -40,9 +43,24 @@ const Buttons = styled.div`
 `;
 
 const ExtendedButton = styled(Button)`
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 `;
 
+const Text = styled.div`
+  font-size:15px;
+  margin-top : 30px;
+`;
+
+const LoadingWrapper = styled.div`
+  margin:auto;
+  margin-top:25vh;
+  left:0;
+  right:0;
+  display: flex;
+  flex-direction:column;
+  justify-content: center;
+  align-items:center;
+`
 interface IProps {
   data?: getRide;
   userData?: userProfile;
@@ -56,15 +74,19 @@ const RidePresenter: React.SFC<IProps> = ({
   updateRideFn
 }) => (
   <Container>
+    {ride && !ride.driver && <LoadingWrapper>
+        <LoadingSpin/>
+        <Text>Waiting a Driver ...</Text>
+    </LoadingWrapper>}
     {ride &&
-      user && (
+      user && ride.driver && (
         <React.Fragment>
           <Title>Passenger</Title>
           <Passenger>
             <Img src={ride.passenger.profilePhoto!} />
             <Data>{ride.passenger.fullName!}</Data>
           </Passenger>
-          {ride.driver && (
+          
             <React.Fragment>
               <Title>Driver</Title>
               <Passenger>
@@ -72,7 +94,7 @@ const RidePresenter: React.SFC<IProps> = ({
                 <Data>{ride.driver.fullName!}</Data>
               </Passenger>
             </React.Fragment>
-          )}
+          
           <Title>From</Title>
           <Data>{ride.pickUpAddress}</Data>
           <Title>To</Title>
