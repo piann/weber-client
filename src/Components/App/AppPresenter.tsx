@@ -18,6 +18,7 @@ import Places from "../../Routes/Places";
 import Ride from "../../Routes/Ride";
 // import Settings from "../../Routes/Settings";
 import VerifyPhone from "../../Routes/VerifyPhone";
+import Chat from "../../Routes/Chat";
 
 interface IProps{
     isLoggedIn:boolean;
@@ -48,6 +49,7 @@ const LoggedOutRoutes: React.SFC = () => (
         <Route path ={"/find-address"} component={FindAddress} /> 
         <Route path ={"/add-place"} component={AddPlace} />
         <Route path ={"/ride/:rideId"} component={Ride} />
+        <Route path ={"/chat/:chatId"} exact={true} component={Chat} />
         {/*<Route path ={"/settings"} component={Settings} />
         <Redirect from={"*"} to={"/"} />*/}
 

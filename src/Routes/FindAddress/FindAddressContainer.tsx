@@ -43,14 +43,14 @@ class FindAddressContainer extends React.Component<IProps, IState>{
         );
     }
 
-    public handleGeoSuccess:PositionCallback = (position:Position) => {
+    public handleGeoSuccess = (position:Position) => {
         const {coords:{latitude, longitude}} = position;
         this.setState({lat:latitude, lng:longitude});
         this.loadMap(latitude, longitude);
         this.reverseGeoCodeAddress(latitude, longitude);
     }
-    public handleGeoError:PositionErrorCallback = () => {
-        console.log("Error. No Location.")
+    public handleGeoError = () => {
+        return;
     }
 
     public loadMap = (lat, lng) => {
@@ -59,7 +59,7 @@ class FindAddressContainer extends React.Component<IProps, IState>{
         const mapNode = ReactDOM.findDOMNode(this.mapRef.current);
         const latlng = new google.maps.LatLng(lat, lng);
         const mapConfig:google.maps.MapOptions = {
-            zoom:13,
+            zoom:15,
             minZoom : 9,
             center:latlng,
             disableDefaultUI:true
@@ -128,6 +128,7 @@ class FindAddressContainer extends React.Component<IProps, IState>{
                 address
             }
         })
+        
         console.log(lat, lng, address);
     }
 }

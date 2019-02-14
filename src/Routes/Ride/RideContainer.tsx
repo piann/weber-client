@@ -43,10 +43,17 @@ class RideContainer extends React.Component<IProps>{
                         const subscribeOption:SubscribeToMoreOptions = {
                             document:RIDE_SUBSCRIPTION,
                             updateQuery:(prev, {subscriptionData})=>{
-                                if(subscriptionData.data){
+                                if(!subscriptionData.data){
                                     return prev;
                                 }
-                                console.log(prev, subscriptionData);
+                                const{
+                                    data:{
+                                        RideStatusSubscription:{status}
+                                    }
+                                } = subscriptionData;
+                                if(status === "FINISHED"){
+                                    window.location.href = "/"
+                                }
                             }
                         }
                         subscribeToMore(subscribeOption);
