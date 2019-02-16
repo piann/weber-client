@@ -10,7 +10,6 @@ import {geoCode, reverseGeoCode} from "../../mapHelpers";
 import {toast} from "react-toastify";
 import { graphql } from 'react-apollo'
 import { REPORT_LOCATION, GET_NEARBY_DRIVERS, REQUEST_RIDE, GET_NEARBY_RIDE, ACCEPT_RIDE, SUBSCRIBE_NEARBY_RIDES } from './HomeQueries';
-import carIcon from "../../images/car.png";
 import {css} from "glamor";
 
 interface IState{
@@ -118,7 +117,7 @@ class HomeContainer extends React.Component<IProps,IState>{
                                               ride: subscriptionData.data.NearbyRideSubscription
                                             }
                                         });
-                                        console.log(newObject);
+                                        
                                         return newObject;
                                         
                                     }
@@ -460,7 +459,7 @@ class HomeContainer extends React.Component<IProps,IState>{
                         const newMarker: google.maps.Marker = new google.maps.Marker(
                             markerOptions
                         );
-                        console.log(`${carIcon}`);
+                        
                         newMarker.set("ID", driver.id);
                         newMarker.setMap(this.map);
                         this.drivers.push(newMarker);
