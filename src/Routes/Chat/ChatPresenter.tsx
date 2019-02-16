@@ -20,7 +20,7 @@ const ChatPresenter:React.SFC<IProps> = ({data:{GetChat:{chat=null}={}}={},
     loading})=>{
 
     return (<Container>
-        <HeaderBar backTo={"/"} />
+        {!loading && <HeaderBar backTo={`/ride/${chat!.rideId}`} />}
         {!loading && chat && user && <React.Fragment>
             {chat.messages &&
             chat.messages.map(message => {
