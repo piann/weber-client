@@ -3,8 +3,9 @@ import { RouteComponentProps } from 'react-router';
 import ChatPresenter from "./ChatPresenter";
 import { getChat, getChatVariables, userProfile, sendMessage} from 'src/types/api';
 import {Query, Mutation, MutationFn} from "react-apollo";
-import { GET_CHAT, SEND_MESSAGE } from './ChatQueries';
+import { GET_CHAT, SEND_MESSAGE, SUBSCRIBE_TO_MESSAGES } from './ChatQueries';
 import { USER_PROFILE } from 'src/sharedQueries';
+import { SubscribeToMoreOptions } from 'apollo-client';
 
 interface IProps extends RouteComponentProps<any>{}
 interface IState {
@@ -48,12 +49,43 @@ class ChatContainer extends React.Component<IProps, IState>{
 
                                 return(
                                 <ChatQuery query={GET_CHAT} variables={{chatId:parsedChatId}}>
-                                { ({data, loading})=>(
+                                { ({data, loading, subscribeToMore})=>{
+                                    const subscribeToMoreOpt:SubscribeToMoreOptions = {
+                                        document:SUBSCRIBE_TO_MESSAGES,
+                                        updateQuery:(prev, {subscriptionData})=>{
+                                            if(!subscriptionData.data){
+                                                return prev;
+                                            }
+                                            const {data:{MessageSubscription}} = subscriptionData;
+                                            const {GetChat:{chat:{messages}}} = prev;
+                                            if (messages.length > 0) {
+                                                const newMessageId = MessageSubscription.id;
+                                                const latestMessageId = messages[messages.length-1].id;
+                                                if(newMessageId === latestMessageId){
+                                                return;
+                                                }
+                                            }
+
+                                            const newObject = Object.assign({},prev,{
+                                                GetChat:{
+                                                    ...prev.GetChat,
+                                                    chat:{
+                                                        ...prev.GetChat.chat,
+                                                        messages:[...prev.GetChat.chat.messages, subscriptionData.data.MessageSubscription, ]
+                                                    }
+                                                }
+                                            });
+                                            return newObject;
+                                        }
+                                    };
+                                    subscribeToMore(subscribeToMoreOpt);
+                                    return(
                                 <ChatPresenter data={data} loading={loading} userData={userData} 
                                 messageText={this.state.message} 
                                 onInputChange={this.onInputChange} 
                                 onSubmit={this.onSubmit}/>
                                 )}
+                                }
                                 </ChatQuery>
                             );}
                         }
