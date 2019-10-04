@@ -57,21 +57,21 @@ class VerifyPhoneContainer extends React.Component<IProps, IState>{
                 onCompleted={(data=>{
                     const {CompletePhoneVerification} = data;
                     if(CompletePhoneVerification.ok){
-                        if(CompletePhoneVerification.token){
+                        //if(CompletePhoneVerification.token){
                             logUserIn({variables:{
                                 token:CompletePhoneVerification.token
                             }});
 
-                        }
+                        //}
                         this.setState({processing:true});
-                        toast.success("Success! Now you are logged in...", {autoClose:1300, className: css({
+                        toast.success("Success!! Now you are logged in...", {autoClose:1300, className: css({
                             background: "#efeff2 !important",
                             color:"#a1887f",
                             fontSize:14
                         })} )
-                        history.push({
+                        /*history.push({
                             pathname: "/",
-                        });
+                        });*/
                     } else {
                         toast.error(CompletePhoneVerification.error, {hideProgressBar:true, className: css({
                             background: "#efeff2 !important",
