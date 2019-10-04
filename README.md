@@ -14,11 +14,11 @@ Client for 'We'ber that is Clone of 'U'ber
 
 - [x] Home
 - [x] Ride
-- [ ] Chat
+- [x] Chat
 - [x] Edit Account
-- [ ] Settings
+- [x] Settings
 - [x] Places
-- [ ] Add Place
+- [x] Add Place
 - [x] Find Address
 - [ ] Challenge: Ride History
 - [ ] Challenge: Email Sign In
